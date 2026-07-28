@@ -13,3 +13,13 @@
 - Agregado `src/data/prices.json` y actualizacion de precios reales de tamanos
 - Creacion de `README.md` principal del proyecto
 - Publicacion inicial del proyecto en GitHub sobre la rama `main`
+
+## 2026-07-28
+- Refactor completo de `OrderPage` a flujo progresivo de 8 pasos (tamano → sabores → toppings → tortas → delivery → datos → revision → WhatsApp)
+- Eliminacion de `HomePage` redirigiendo `/` a `/pedido`
+- Simplificacion del header de `AppShell` eliminando navegacion innecesaria
+- Eliminacion de radios de delivery duplicados en `CheckoutForm` (paso dedicado aparte)
+- Sincronizacion de `orderType` entre Zustand store y React Hook Form en el paso de delivery
+- Fix de infinite re-render loop en `useOrder` hook (selectores de Zustand individuales)
+- Actualizacion del `completed` state al editar tamano/sabores desde secciones colapsadas
+- Agregado de 7 nuevos toppings con precios reales a `toppings.json`

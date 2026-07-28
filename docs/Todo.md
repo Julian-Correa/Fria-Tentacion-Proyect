@@ -15,6 +15,13 @@
 | Persistir carrito en LocalStorage | Alta | Completado | Zustand persistiendo pedido y datos del cliente |
 | Agregar pruebas de logica critica | Alta | Completado | Reglas de sabores, calculo total y mensaje WhatsApp |
 | Preparar Netlify | Media | Completado | `netlify.toml` con redirect SPA |
+| Refactor a flujo progresivo de 8 pasos | Alta | Completado | OrderPage con UI paso a paso, secciones colapsables y CTA contextual |
+| Eliminar landing page | Alta | Completado | `/` redirige a `/pedido` |
+| Eliminar radios duplicados en CheckoutForm | Alta | Completado | Delivery se selecciona en paso dedicado |
+| Fix infinite loop en useOrder hook | Alta | Completado | Selectores individuales de Zustand |
+| Actualizar toppings con precios reales | Media | Completado | 7 toppings nuevos agregados |
 | Definir radio de entrega | Alta | Pendiente | TODO de negocio |
 | Definir horario de entrega | Alta | Pendiente | TODO de negocio |
 | Revisar alertas de `npm audit` | Media | Pendiente | `react-router-dom` y tooling aun reportan advisories upstream |
+| Eliminar `PotBuilder.tsx` inactivo | Baja | Pendiente | Quedo sin uso tras refactor a flujo inline en OrderPage |
+| Soporte multi-pote con edicion directa | Baja | Pendiente | Actualmente solo crear/eliminar, no editar potes existentes |

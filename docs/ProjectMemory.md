@@ -30,10 +30,11 @@
 - Validacion con Zod y formularios con React Hook Form
 
 ## Arquitectura implementada
-- `src/features/order/`: constructor de potes, validaciones y resumen
+- `src/pages/`: `OrderPage` con flujo progresivo de 8 pasos, `SuccessPage` y `NotFoundPage`
+- `src/features/order/`: constructor de potes, validaciones y resumen (PotBuilder inactivo, reemplazado por flujo inline en OrderPage)
 - `src/features/catalog/`: catalogo de tortas
 - `src/components/ui/`: primitives reutilizables
-- `src/layouts/`: shell principal de la aplicacion
+- `src/layouts/`: shell principal de la aplicacion sin navegacion interna
 - `src/services/`: catalogo tipado y WhatsApp
 - `src/store/`: store global persistido del pedido
 - `src/hooks/`: hooks de pedido, tema, LocalStorage y WhatsApp
@@ -80,12 +81,25 @@
 - `src/assets/`
 - `src/styles/`
 
+## Flujo de pedido (8 pasos progresivos)
+1. Elegir tamano del pote
+2. Seleccionar sabores (validacion de limite segun tamano)
+3. Agregar toppings opcionales (max 3, con costo)
+4. Sumar tortas opcionales
+5. Elegir retiro o delivery
+6. Completar datos del cliente (nombre, telefono, direccion segun delivery)
+7. Revisar resumen y confirmar
+8. Enviar por WhatsApp → redirige a pagina de exito
+
+Las secciones completadas se colapsan en resumen compacto. El usuario puede reabrir cualquier paso para editar.
+
 ## Estado actual
 - Aplicacion inicializada con Vite, React, TypeScript y TailwindCSS
-- Rutas implementadas: `/`, `/pedido`, `/exito`, `*`
+- Rutas implementadas: `/` → redirige a `/pedido`, `/pedido`, `/exito`, `*`
 - Datos de negocio cargados desde JSON en `src/data/`
 - Catalogo actual de sabores actualizado a 52 opciones provistas por el negocio
 - Precios actuales de potes actualizados desde `src/data/prices.json`
+- Toppings actualizados con precios reales (11 opciones)
 - README principal del proyecto creado en la raiz
 - Repositorio git inicializado y publicado en GitHub sobre rama `main`
 - Store del pedido persistido con Zustand + LocalStorage
@@ -93,9 +107,13 @@
 - Pagina de exito implementada
 - Pruebas criticas implementadas y pasando
 - `build`, `lint` y `test` verificados
+- Flujo progresivo de 8 pasos con UI inspirada en PedidosYa
+- Sin landing page: la app abre directamente en el flujo de pedido
+- Sin navegacion interna en el header
 
 ## Roadmap inmediato
 1. Definir radio de entrega
 2. Definir horario de entrega
 3. Revisar alertas pendientes de `npm audit` relacionadas con dependencias upstream
 4. Evaluar pruebas de interfaz para flujo completo del pedido
+5. Eliminar componente `PotBuilder.tsx` (inactivo tras refactor a flujo inline)

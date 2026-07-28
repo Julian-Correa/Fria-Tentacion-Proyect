@@ -122,3 +122,28 @@
   - La rama principal publicada del proyecto es `main`
   - El remoto oficial inicial queda asociado a `Julian-Correa/Fria-Tentacion-Proyect`
 - Siguiente paso recomendado: continuar con datos reales de toppings, tortas y configuracion final de negocio
+
+## 2026-07-28
+- Trabajo completado: refactor a flujo progresivo de 8 pasos, fix de infinite loop, actualizacion de toppings y documentacion
+- Archivos modificados:
+  - `src/App.tsx`
+  - `src/data/toppings.json`
+  - `src/layouts/AppShell.tsx`
+  - `src/pages/OrderPage.tsx`
+  - `src/features/order/components/CheckoutForm.tsx`
+  - `src/hooks/useOrder.ts`
+  - `docs/ProjectMemory.md`
+  - `docs/Todo.md`
+  - `docs/Changelog.md`
+  - `docs/SessionLog.md`
+  - `docs/Architecture.md`
+  - `docs/KnownIssues.md`
+  - `docs/FileIndex.md`
+- Archivos nuevos:
+  - `CLAUDE.md`
+- Decisiones tomadas:
+  - Reemplazar flujo plano de OrderPage por 8 pasos progresivos con secciones colapsables
+  - Eliminar HomePage con redireccion directa a `/pedido`
+  - Separar seleccion de delivery como paso independiente (no dentro del formulario de datos)
+  - Selectores individuales de Zustand en useOrder para evitar infinite re-renders
+- Siguiente paso recomendado: definir radio y horario de entrega, evaluar eliminar PotBuilder.tsx inactivo

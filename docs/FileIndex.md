@@ -39,8 +39,19 @@
 ## src/store/order-store.ts
 - Estado global del pedido con persistencia local
 
+## CLAUDE.md
+- Prompt maestro con requisitos de UI/UX, flujo de pedido y reglas de diseno
+
+## src/pages/OrderPage.tsx
+- Pagina principal con flujo progresivo de 8 pasos (tamano → sabores → toppings → tortas → delivery → datos → revision → WhatsApp)
+- CTA contextual por paso y barra flotante inferior en mobile
+
+## src/hooks/useOrder.ts
+- Hook que conecta Zustand store con la UI, expone datos y summary calculado en vivo
+- Selectores individuales para evitar infinite re-renders
+
 ## src/features/order/components/PotBuilder.tsx
-- Constructor principal de potes con reglas de sabores y toppings
+- Constructor principal de potes (INACTIVO desde refactor a flujo inline en OrderPage)
 
 ## src/features/order/components/OrderSummary.tsx
 - Resumen en vivo con totales y eliminacion de items

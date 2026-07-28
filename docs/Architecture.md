@@ -9,7 +9,7 @@
 - UI mobile-first con TailwindCSS y soporte dark mode
 
 ## Modulos principales
-- `pages/`: pantallas de Home, Pedido, Exito y 404
+- `pages/`: `OrderPage` con flujo progresivo, `SuccessPage` y `NotFoundPage` (sin `HomePage`)
 - `components/ui/`: UI reutilizable
 - `features/order/`: potes, resumen y validaciones del pedido
 - `features/catalog/`: tortas y catalogo visible
@@ -19,14 +19,35 @@
 - `config/`: configuracion central de aplicacion
 - `utils/`: utilidades puras
 
+## Flujo de pedido (8 pasos progresivos)
+1. Elegir tamano del pote
+2. Seleccionar sabores (validacion segun limite del tamano)
+3. Agregar toppings opcionales (max 3, con costo adicional)
+4. Sumar tortas opcionales
+5. Elegir retiro o delivery
+6. Completar datos del cliente (nombre, telefono, direccion si es delivery)
+7. Revisar resumen completo
+8. Enviar por WhatsApp → pagina de exito
+
+Cada paso colapsa al completarse con resumen visible. El usuario puede reabrir pasos anteriores para editar.
+
 ## Flujo de estado
 1. La app carga configuracion y datos estaticos
-2. El usuario arma el pedido
-3. El store calcula resumen, subtotal y total
-4. El formulario valida datos del cliente y entrega/retiro
-5. Se genera un ID corto de pedido
-6. Se arma el mensaje de WhatsApp
-7. Se abre WhatsApp y luego se navega a Exito
+2. El usuario avanza paso a paso por el flujo progresivo
+3. Los pasos 0-2 construyen un pote que se agrega al carrito
+4. El store calcula resumen, subtotal y total en vivo
+5. El formulario valida datos del cliente segun tipo de entrega
+6. Se genera un ID corto de pedido
+7. Se arma y abre el mensaje de WhatsApp
+8. Se navega a la pagina de exito
+
+## UI/UX
+- Sin landing page: la app abre directamente en `/pedido`
+- Sin navegacion interna en el header
+- Mobile: barra flotante inferior con total + CTA contextual
+- Desktop: layout de dos columnas (izquierda: seleccion, derecha: resumen sticky)
+- Animaciones sutiles con Tailwind transitions
+- Secciones colapsables con icono de check al completarse
 
 ## Persistencia
 - Persistido: potes, tortas y datos del cliente
