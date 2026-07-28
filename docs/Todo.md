@@ -28,3 +28,7 @@
 | Revisar alertas de `npm audit` | Media | Completado | `react-router-dom@7.18.1` (última versión, advisory solo afecta RSC — no usado), `brace-expansion` en ESLint (dev-only, bajo riesgo). Build y tests OK |
 | Eliminar `PotBuilder.tsx` inactivo | Baja | Completado | Eliminado en commit `ad7dc06` |
 | Soporte multi-pote con edicion directa | Media | Completado | Paso 1 permite agregar varios potes, pasos 2-3 se repiten por cada pote |
+| Eliminar pote en paso de revision | Media | Completado | Boton eliminar con icono trash en cada pote del review |
+| Day mode / light mode | Media | Completado | Paleta #ffffff, #b6ffff, #40cfff. Toggle sol/luna en header |
+| Editar/eliminar tortas en paso de revision | Media | Completado | Controles +/- y boton eliminar en cada torta del review |
+| Fix dark mode seleccion retiro/delivery | Baja | Completado | Agregado `dark:has-[:checked]:bg-brand-400/30` para mejor visibilidad |
