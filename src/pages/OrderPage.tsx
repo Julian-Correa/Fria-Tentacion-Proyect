@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { Button } from '@/components/ui/Button'
 import { SectionCard } from '@/components/ui/SectionCard'
+import { appConfig } from '@/config/app'
 import { ROUTES } from '@/constants/routes'
 import { CakeCatalog } from '@/features/catalog/components/CakeCatalog'
 import { CheckoutForm } from '@/features/order/components/CheckoutForm'
@@ -383,7 +384,7 @@ export const OrderPage = () => {
                     </div>
                     <div>
                       <p className="font-semibold text-white">Delivery</p>
-                      <p className="text-xs text-slate-400">El horario y el radio se confirman por WhatsApp.</p>
+                      <p className="text-xs text-slate-400">{appConfig.store.deliveryNote}</p>
                     </div>
                   </div>
                 </label>
@@ -408,6 +409,17 @@ export const OrderPage = () => {
                   <div className="flex items-start gap-3 rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-100">
                     <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                     <span>{submitError}</span>
+                  </div>
+                ) : null}
+
+                {Object.keys(form.formState.errors).length > 0 ? (
+                  <div className="rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-100">
+                    <p className="mb-2 font-semibold">Corregí estos errores antes de confirmar:</p>
+                    <ul className="list-inside list-disc space-y-1">
+                      {Object.entries(form.formState.errors).map(([key, error]) => (
+                        <li key={key}>{error?.message as string}</li>
+                      ))}
+                    </ul>
                   </div>
                 ) : null}
               </div>
@@ -478,7 +490,9 @@ export const OrderPage = () => {
         completeCurrentStep()
         break
       case 'customer':
-        completeCurrentStep()
+        form.trigger().then((isValid) => {
+          if (isValid) completeCurrentStep()
+        })
         break
       case 'review':
         handleConfirmOrder()

@@ -2,6 +2,7 @@ import type { UseFormRegister, UseFormWatch, FieldErrors } from 'react-hook-form
 
 import { InputField, TextareaField } from '@/components/ui/Field'
 import { SectionCard } from '@/components/ui/SectionCard'
+import { appConfig } from '@/config/app'
 import type { CustomerDraft } from '@/types/order'
 
 type CheckoutFormProps = {
@@ -69,8 +70,8 @@ export const CheckoutForm = ({ register, watch, errors }: CheckoutFormProps) => 
               error={errors.apartment?.message}
               {...register('apartment')}
             />
-            <div className="rounded-3xl border border-amber-300/20 bg-amber-500/10 p-4 text-sm text-amber-100 md:col-span-2">
-              TODO de negocio: el radio y el horario exactos de entrega aun no estan definidos.
+            <div className="rounded-3xl border border-brand-400/20 bg-brand-500/10 p-4 text-sm text-brand-100 md:col-span-2">
+              {appConfig.store.deliveryNote}
             </div>
           </>
         ) : null}
