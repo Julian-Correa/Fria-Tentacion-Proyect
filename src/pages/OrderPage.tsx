@@ -26,6 +26,7 @@ import { useOrder } from '@/hooks/useOrder'
 import { useWhatsapp } from '@/hooks/useWhatsapp'
 import { catalog } from '@/services/catalog'
 import type { CustomerDraft, PotToppingSelection } from '@/types/order'
+import { formatCurrency } from '@/utils/formatCurrency'
 import { generateOrderId } from '@/utils/generateOrderId'
 import { getPotTotal } from '@/utils/orderCalculations'
 import { validateOrder } from '@/utils/validateOrder'
@@ -62,7 +63,7 @@ type CompletedData = {
 export const OrderPage = () => {
   const navigate = useNavigate()
   const { sendOrder } = useWhatsapp()
-  const { pots, cakes, customer, addPot, removePot, updatePot, updateCustomer, completeOrder, summary } = useOrder()
+  const { pots, cakes, customer, addPot, removePot, updatePot, setCakeQuantity, updateCustomer, completeOrder, summary } = useOrder()
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -743,11 +744,56 @@ export const OrderPage = () => {
                       >
                         <div>
                           <p className="font-semibold text-slate-900 dark:text-white">{cake.name}</p>
-                          <p className="text-sm text-slate-500 dark:text-slate-400">Cantidad: {cake.quantity}</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">
+                            {cake.quantity} x {formatCurrency(cake.price)}
+                          </p>
                         </div>
-                        <p className="whitespace-nowrap font-semibold text-brand-500 dark:text-brand-100">
-                          $ {(cake.price * cake.quantity).toLocaleString('es-AR')}
-                        </p>
+                        <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="secondary"
+                              className="h-8 w-8 rounded-full px-0 py-0 text-sm"
+                              aria-label={`Restar ${cake.name}`}
+                              onClick={() =>
+                                setCakeQuantity(
+                                  { cakeId: cake.cakeId, name: cake.name, price: cake.price, image: cake.image },
+                                  cake.quantity - 1,
+                                )
+                              }
+                            >
+                              -
+                            </Button>
+                            <span className="min-w-6 text-center text-sm text-slate-900 dark:text-white">{cake.quantity}</span>
+                            <Button
+                              variant="secondary"
+                              className="h-8 w-8 rounded-full px-0 py-0 text-sm"
+                              aria-label={`Sumar ${cake.name}`}
+                              onClick={() =>
+                                setCakeQuantity(
+                                  { cakeId: cake.cakeId, name: cake.name, price: cake.price, image: cake.image },
+                                  cake.quantity + 1,
+                                )
+                              }
+                            >
+                              +
+                            </Button>
+                          </div>
+                          <p className="whitespace-nowrap font-semibold text-brand-500 dark:text-brand-100">
+                            {formatCurrency(cake.price * cake.quantity)}
+                          </p>
+                          <Button
+                            variant="ghost"
+                            className="px-2 py-2 text-rose-500 hover:bg-rose-500/10 dark:text-rose-300"
+                            onClick={() =>
+                              setCakeQuantity(
+                                { cakeId: cake.cakeId, name: cake.name, price: cake.price, image: cake.image },
+                                0,
+                              )
+                            }
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </div>
                       </article>
                     ))}
                   </div>
