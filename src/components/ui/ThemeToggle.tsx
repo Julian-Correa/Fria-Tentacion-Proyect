@@ -9,7 +9,7 @@ export const ThemeToggle = () => {
   return (
     <Button
       variant="ghost"
-      className="rounded-full border border-white/10 px-3 py-2"
+      className="rounded-full border border-slate-200 px-3 py-2 dark:border-white/10"
       aria-label="Cambiar tema"
       onClick={toggleTheme}
     >

@@ -7,25 +7,25 @@ export default {
     extend: {
       colors: {
         brand: {
-          50: '#f0f7ff',
-          100: '#d8ebff',
-          200: '#b8dcff',
-          300: '#89c5ff',
-          400: '#4ca4ff',
-          500: '#177ff0',
-          600: '#0c64d0',
-          700: '#0e50a8',
-          800: '#124487',
-          900: '#16396f',
-          950: '#0f2548',
+          50: '#f0feff',
+          100: '#d6fbff',
+          200: '#b6ffff',
+          300: '#7ef0ff',
+          400: '#40cfff',
+          500: '#1ab3e0',
+          600: '#0e8fb8',
+          700: '#0f7294',
+          800: '#145d78',
+          900: '#164e63',
+          950: '#093347',
         },
       },
       boxShadow: {
-        glow: '0 18px 60px rgba(23, 127, 240, 0.18)',
+        glow: '0 18px 60px rgba(64, 207, 255, 0.18)',
       },
       backgroundImage: {
         aurora:
-          'radial-gradient(circle at top, rgba(76,164,255,0.2), transparent 40%), radial-gradient(circle at bottom right, rgba(184,220,255,0.18), transparent 30%)',
+          'radial-gradient(circle at top, rgba(64,207,255,0.15), transparent 40%), radial-gradient(circle at bottom right, rgba(182,255,255,0.12), transparent 30%)',
       },
     },
   },

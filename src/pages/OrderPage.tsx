@@ -364,27 +364,27 @@ export const OrderPage = () => {
     const summaryContent = (() => {
       switch (step.key) {
         case 'size':
-          return completed.size ? <p className="text-white">{completed.size}</p> : null
+          return completed.size ? <p className="text-slate-900 dark:text-white">{completed.size}</p> : null
         case 'flavors':
           return completed.flavors ? (
-            <p className="text-xs text-slate-300">Sabores seleccionados</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300">Sabores seleccionados</p>
           ) : null
         case 'toppings':
           return completed.toppings ? (
-            <p className="text-xs text-slate-300">Toppings seleccionados</p>
+            <p className="text-xs text-slate-600 dark:text-slate-300">Toppings seleccionados</p>
           ) : (
-            <p className="text-xs text-slate-400">Sin toppings</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Sin toppings</p>
           )
         case 'cakes':
           return cakes.length > 0 ? (
-            <p className="text-white">{cakes.map((c) => `${c.name} x${c.quantity}`).join(', ')}</p>
+            <p className="text-slate-900 dark:text-white">{cakes.map((c) => `${c.name} x${c.quantity}`).join(', ')}</p>
           ) : (
-            <p className="text-xs text-slate-400">Sin tortas</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Sin tortas</p>
           )
         case 'delivery':
-          return <p className="text-white">{customer.orderType === 'pickup' ? 'Retiro en local' : 'Delivery'}</p>
+          return <p className="text-slate-900 dark:text-white">{customer.orderType === 'pickup' ? 'Retiro en local' : 'Delivery'}</p>
         case 'customer':
-          return customer.name ? <p className="text-white">{customer.name}</p> : null
+          return customer.name ? <p className="text-slate-900 dark:text-white">{customer.name}</p> : null
         default:
           return null
       }
@@ -395,7 +395,7 @@ export const OrderPage = () => {
         {isCompleted ? (
           <button
             type="button"
-            className="w-full rounded-[28px] border border-white/10 bg-slate-900/70 p-5 text-left shadow-2xl shadow-slate-950/20 backdrop-blur transition hover:border-brand-400/40 md:p-6"
+            className="w-full rounded-[28px] border border-slate-200 bg-white/70 p-5 text-left shadow-md backdrop-blur transition hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-900/70 dark:shadow-2xl dark:shadow-slate-950/20 md:p-6"
             onClick={() => {
               if (pots.length > 0 && !editingPotId && index < 3) {
                 const lastPot = pots[pots.length - 1]
@@ -411,11 +411,11 @@ export const OrderPage = () => {
                   <Check className="size-3.5" />
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.2em] text-brand-200">{step.summary}</p>
+                  <p className="text-xs uppercase tracking-[0.2em] text-brand-500 dark:text-brand-200">{step.summary}</p>
                   {summaryContent}
                 </div>
               </div>
-              <ChevronDown className="size-4 shrink-0 text-slate-400" />
+              <ChevronDown className="size-4 shrink-0 text-slate-500 dark:text-slate-400" />
             </div>
           </button>
         ) : null}
@@ -426,15 +426,15 @@ export const OrderPage = () => {
               <div className="flex size-8 items-center justify-center rounded-full bg-brand-500 text-sm font-bold text-white">
                 {index + 1}
               </div>
-              <h2 className="text-xl font-semibold text-white">{step.title}</h2>
+              <h2 className="text-xl font-semibold text-slate-900 dark:text-white">{step.title}</h2>
             </div>
 
             {editingPotId && (
               <div className="flex items-center justify-between rounded-3xl border border-amber-300/20 bg-amber-500/10 px-4 py-3">
-                <p className="text-sm text-amber-200">Editando pote existente</p>
+                <p className="text-sm text-amber-600 dark:text-amber-200">Editando pote existente</p>
                 <button
                   type="button"
-                  className="flex items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
+                  className="flex items-center gap-1.5 text-sm text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white"
                   onClick={handleCancelEdit}
                 >
                   <X className="size-4" />
@@ -450,13 +450,13 @@ export const OrderPage = () => {
                     <button
                       key={size.id}
                       type="button"
-                      className={`rounded-3xl border p-4 text-left transition ${sizeId === size.id ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/50 hover:border-brand-400/40'}`}
+                      className={`rounded-3xl border p-4 text-left transition ${sizeId === size.id ? 'border-brand-300 bg-brand-400/15' : 'border-slate-200 bg-slate-50 hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-950/50'}`}
                       onClick={() => { setSizeId(size.id); setStepError(null) }}
                     >
-                      <p className="text-sm text-slate-300">Tamaño</p>
-                      <p className="mt-1 text-lg font-semibold text-white">{size.label}</p>
-                      <p className="mt-1 text-sm text-brand-100">$ {size.price.toLocaleString('es-AR')}</p>
-                      <p className="mt-3 text-xs text-slate-400">Hasta {size.maxFlavors} sabores</p>
+                      <p className="text-sm text-slate-600 dark:text-slate-300">Tamaño</p>
+                      <p className="mt-1 text-lg font-semibold text-slate-900 dark:text-white">{size.label}</p>
+                      <p className="mt-1 text-sm text-brand-500 dark:text-brand-100">$ {size.price.toLocaleString('es-AR')}</p>
+                      <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">Hasta {size.maxFlavors} sabores</p>
                     </button>
                   ))}
                 </div>
@@ -470,22 +470,22 @@ export const OrderPage = () => {
 
                 {pendingPots.length > 0 ? (
                   <div className="space-y-2">
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {pendingPots.length} pote{pendingPots.length > 1 ? 's' : ''} agregado{pendingPots.length > 1 ? 's' : ''}:
                     </p>
                     <div className="space-y-2">
                       {pendingPots.map((pot, i) => (
                         <div
                           key={pot.id}
-                          className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3"
+                          className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-white/10 dark:bg-slate-950/50"
                         >
-                          <span className="text-sm text-white">
+                          <span className="text-sm text-slate-900 dark:text-white">
                             Pote {i + 1}: {pot.sizeLabel}
                           </span>
                           <button
                             type="button"
                             onClick={() => handleRemovePendingPot(i)}
-                            className="rounded-full p-1 text-slate-400 transition hover:bg-rose-500/20 hover:text-rose-300"
+                            className="rounded-full p-1 text-slate-500 transition hover:bg-rose-500/20 hover:text-rose-600 dark:text-slate-400 dark:hover:text-rose-300"
                           >
                             <X className="size-4" />
                           </button>
@@ -494,7 +494,7 @@ export const OrderPage = () => {
                     </div>
                   </div>
                 ) : (
-                  <p className="text-center text-sm text-slate-500">Agregá al menos un pote para continuar</p>
+                  <p className="text-center text-sm text-slate-400 dark:text-slate-500">Agregá al menos un pote para continuar</p>
                 )}
               </div>
             ) : null}
@@ -503,8 +503,8 @@ export const OrderPage = () => {
               <div className="rounded-3xl border border-brand-300/20 bg-brand-400/10 p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-xs text-slate-400">Editando</p>
-                    <p className="text-lg font-semibold text-white">{pendingPots[0]?.sizeLabel}</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Editando</p>
+                    <p className="text-lg font-semibold text-slate-900 dark:text-white">{pendingPots[0]?.sizeLabel}</p>
                   </div>
                   <Button variant="ghost" className="px-3 py-1.5 text-xs" onClick={() => goToStep(1)}>
                     Cambiar sabores
@@ -520,12 +520,12 @@ export const OrderPage = () => {
                     {pendingPots.map((_, i) => (
                       <span
                         key={i}
-                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-200' : 'bg-slate-800 text-slate-500'}`}
+                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-500 dark:text-brand-200' : 'bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-500'}`}
                       >
                         {i + 1}
                       </span>
                     ))}
-                    <span className="ml-1 text-slate-400">
+                    <span className="ml-1 text-slate-500 dark:text-slate-400">
                       Pote {activePotIndex + 1} de {pendingPots.length}
                     </span>
                   </div>
@@ -533,7 +533,7 @@ export const OrderPage = () => {
 
                 {pendingPots[activePotIndex] ? (
                   <>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       {(() => {
                         const pot = pendingPots[activePotIndex]
                         const size = catalog.sizes.find((s) => s.id === pot.sizeId)
@@ -548,7 +548,7 @@ export const OrderPage = () => {
                           <button
                             key={flavor.id}
                             type="button"
-                            className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-brand-400/40'}`}
+                            className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-300'}`}
                             onClick={() => toggleFlavor(flavor.name)}
                           >
                             {flavor.name}
@@ -556,13 +556,13 @@ export const OrderPage = () => {
                         )
                       })}
                     </div>
-                    <label className="flex flex-col gap-2 text-sm text-slate-200">
+                    <label className="flex flex-col gap-2 text-sm text-slate-700 dark:text-slate-200">
                       <span>Nota del pote (opcional)</span>
                       <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         placeholder="Ejemplo: envío con cucharitas."
-                        className="min-h-24 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-brand-400"
+                        className="min-h-24 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-400 dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-50 dark:placeholder:text-slate-500"
                       />
                     </label>
                   </>
@@ -577,12 +577,12 @@ export const OrderPage = () => {
                     {pendingPots.map((_, i) => (
                       <span
                         key={i}
-                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-200' : 'bg-slate-800 text-slate-500'}`}
+                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-500 dark:text-brand-200' : 'bg-slate-200 text-slate-500 dark:bg-slate-800 dark:text-slate-500'}`}
                       >
                         {i + 1}
                       </span>
                     ))}
-                    <span className="ml-1 text-slate-400">
+                    <span className="ml-1 text-slate-500 dark:text-slate-400">
                       Pote {activePotIndex + 1} de {pendingPots.length}
                     </span>
                   </div>
@@ -590,7 +590,7 @@ export const OrderPage = () => {
 
                 {pendingPots[activePotIndex] ? (
                   <>
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-500 dark:text-slate-400">
                       Hasta {catalog.business.rules.maxToppingsPerPot}. Todos tienen costo adicional.
                     </p>
                     <div className="grid gap-2 md:grid-cols-2">
@@ -600,22 +600,22 @@ export const OrderPage = () => {
                           <button
                             key={topping.id}
                             type="button"
-                            className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${isSelected ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/40 hover:border-brand-400/40'}`}
+                            className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${isSelected ? 'border-brand-300 bg-brand-400/15' : 'border-slate-200 bg-slate-50 hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-950/40'}`}
                             onClick={() => toggleTopping(topping.id)}
                           >
-                            <span className="text-sm text-white">{topping.name}</span>
-                            <span className="text-sm text-brand-100">+$ {topping.price.toLocaleString('es-AR')}</span>
+                            <span className="text-sm text-slate-900 dark:text-white">{topping.name}</span>
+                            <span className="text-sm text-brand-500 dark:text-brand-100">+$ {topping.price.toLocaleString('es-AR')}</span>
                           </button>
                         )
                       })}
                     </div>
-                    <label className="flex flex-col gap-2 text-sm text-slate-200">
+                    <label className="flex flex-col gap-2 text-sm text-slate-700 dark:text-slate-200">
                       <span>Nota del pote (opcional)</span>
                       <textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         placeholder="Ejemplo: envío con cucharitas."
-                        className="min-h-24 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-brand-400"
+                        className="min-h-24 rounded-2xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-brand-400 dark:border-white/10 dark:bg-slate-950/70 dark:text-slate-50 dark:placeholder:text-slate-500"
                       />
                     </label>
                   </>
@@ -629,7 +629,7 @@ export const OrderPage = () => {
 
             {step.key === 'delivery' ? (
               <div className="grid gap-3 sm:grid-cols-2">
-                <label className="cursor-pointer rounded-3xl border border-white/10 bg-slate-950/50 p-4 text-sm text-slate-200 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15">
+                <label className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200">
                   <input
                     type="radio"
                     value="pickup"
@@ -641,16 +641,16 @@ export const OrderPage = () => {
                     }}
                   />
                   <div className="flex items-center gap-3">
-                    <div className="size-5 text-brand-200">
+                    <div className="size-5 text-brand-500 dark:text-brand-200">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-white">Retiro en local</p>
-                      <p className="text-xs text-slate-400">Preparamos tu pedido y te avisamos por WhatsApp.</p>
+                      <p className="font-semibold text-slate-900 dark:text-white">Retiro en local</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">Preparamos tu pedido y te avisamos por WhatsApp.</p>
                     </div>
                   </div>
                 </label>
-                <label className="cursor-pointer rounded-3xl border border-white/10 bg-slate-950/50 p-4 text-sm text-slate-200 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15">
+                <label className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200">
                   <input
                     type="radio"
                     value="delivery"
@@ -662,12 +662,12 @@ export const OrderPage = () => {
                     }}
                   />
                   <div className="flex items-center gap-3">
-                    <div className="size-5 text-brand-200">
+                    <div className="size-5 text-brand-500 dark:text-brand-200">
                       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                     </div>
                     <div>
-                      <p className="font-semibold text-white">Delivery</p>
-                      <p className="text-xs text-slate-400">{appConfig.store.deliveryNote}</p>
+                      <p className="font-semibold text-slate-900 dark:text-white">Delivery</p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400">{appConfig.store.deliveryNote}</p>
                     </div>
                   </div>
                 </label>
@@ -684,35 +684,35 @@ export const OrderPage = () => {
 
             {step.key === 'review' ? (
               <div className="space-y-4">
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-slate-600 dark:text-slate-300">
                   Revisá tu pedido antes de confirmar. Al enviar se abre WhatsApp con el resumen.
                 </p>
 
                 {pots.length > 0 ? (
                   <div className="space-y-3">
-                    <p className="text-sm font-semibold text-white">Potes</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Potes</p>
                     {pots.map((pot) => (
-                      <article key={pot.id} className="rounded-3xl border border-white/10 bg-slate-950/50 p-4">
+                      <article key={pot.id} className="rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/50">
                         <div className="flex items-start justify-between gap-4">
                           <div className="space-y-2">
-                            <p className="font-semibold text-white">{pot.sizeLabel}</p>
-                            <ul className="space-y-1 text-sm text-slate-300">
+                            <p className="font-semibold text-slate-900 dark:text-white">{pot.sizeLabel}</p>
+                            <ul className="space-y-1 text-sm text-slate-600 dark:text-slate-300">
                               {pot.flavors.map((flavor) => (
                                 <li key={flavor}>- {flavor}</li>
                               ))}
                             </ul>
                             {pot.toppings.length > 0 ? (
-                              <p className="text-sm text-slate-400">
+                              <p className="text-sm text-slate-500 dark:text-slate-400">
                                 Toppings: {pot.toppings.map((t) => t.name).join(', ')}
                               </p>
                             ) : null}
-                            {pot.note ? <p className="text-sm text-slate-500">Nota: {pot.note}</p> : null}
+                            {pot.note ? <p className="text-sm text-slate-400 dark:text-slate-500">Nota: {pot.note}</p> : null}
                           </div>
                           <div className="flex flex-col items-end gap-2">
-                            <p className="whitespace-nowrap font-semibold text-brand-100">$ {getPotTotal(pot).toLocaleString('es-AR')}</p>
+                            <p className="whitespace-nowrap font-semibold text-brand-500 dark:text-brand-100">$ {getPotTotal(pot).toLocaleString('es-AR')}</p>
                             <button
                               type="button"
-                              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:border-brand-400/40 hover:text-brand-200"
+                              className="flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-xs text-slate-600 transition hover:border-brand-400/40 hover:text-brand-500 dark:border-white/10 dark:text-slate-300 dark:hover:text-brand-200"
                               onClick={() => handleEditPot(pot.id)}
                             >
                               <Pencil className="size-3" />
@@ -720,7 +720,7 @@ export const OrderPage = () => {
                             </button>
                             <button
                               type="button"
-                              className="flex items-center gap-1.5 rounded-full border border-rose-300/20 px-3 py-1.5 text-xs text-rose-300 transition hover:border-rose-400/40 hover:text-rose-200"
+                              className="flex items-center gap-1.5 rounded-full border border-rose-200 px-3 py-1.5 text-xs text-rose-600 transition hover:border-rose-400/40 hover:text-rose-500 dark:border-rose-300/20 dark:text-rose-300 dark:hover:text-rose-200"
                               onClick={() => removePot(pot.id)}
                             >
                               <Trash2 className="size-3" />
@@ -735,17 +735,17 @@ export const OrderPage = () => {
 
                 {cakes.length > 0 ? (
                   <div className="space-y-3">
-                    <p className="text-sm font-semibold text-white">Tortas</p>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white">Tortas</p>
                     {cakes.map((cake) => (
                       <article
                         key={cake.cakeId}
-                        className="flex items-center justify-between gap-4 rounded-3xl border border-white/10 bg-slate-950/50 p-4"
+                        className="flex items-center justify-between gap-4 rounded-3xl border border-slate-200 bg-slate-50 p-4 dark:border-white/10 dark:bg-slate-950/50"
                       >
                         <div>
-                          <p className="font-semibold text-white">{cake.name}</p>
-                          <p className="text-sm text-slate-400">Cantidad: {cake.quantity}</p>
+                          <p className="font-semibold text-slate-900 dark:text-white">{cake.name}</p>
+                          <p className="text-sm text-slate-500 dark:text-slate-400">Cantidad: {cake.quantity}</p>
                         </div>
-                        <p className="whitespace-nowrap font-semibold text-brand-100">
+                        <p className="whitespace-nowrap font-semibold text-brand-500 dark:text-brand-100">
                           $ {(cake.price * cake.quantity).toLocaleString('es-AR')}
                         </p>
                       </article>
@@ -754,14 +754,14 @@ export const OrderPage = () => {
                 ) : null}
 
                 {submitError ? (
-                  <div className="flex items-start gap-3 rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-100">
+                  <div className="flex items-start gap-3 rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-700 dark:text-rose-100">
                     <AlertTriangle className="mt-0.5 size-4 shrink-0" />
                     <span>{submitError}</span>
                   </div>
                 ) : null}
 
                 {Object.keys(form.formState.errors).length > 0 ? (
-                  <div className="rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-100">
+                  <div className="rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-700 dark:text-rose-100">
                     <p className="mb-2 font-semibold">Corregí estos errores antes de confirmar:</p>
                     <ul className="list-inside list-disc space-y-1">
                       {Object.entries(form.formState.errors).map(([key, error]) => (
@@ -774,7 +774,7 @@ export const OrderPage = () => {
             ) : null}
 
             {stepError ? (
-              <p className="text-sm text-rose-300">{stepError}</p>
+              <p className="text-sm text-rose-600 dark:text-rose-300">{stepError}</p>
             ) : null}
 
             {/* CTA dentro del step en desktop, en mobile lo maneja la barra flotante */}
@@ -891,15 +891,15 @@ export const OrderPage = () => {
       <div className="space-y-4 pb-24 md:pb-6">
         {/* Always visible summary section */}
         {pots.length > 0 || cakes.length > 0 ? (
-          <div className="flex items-center gap-2 rounded-[28px] border border-brand-400/20 bg-brand-500/10 p-4 text-sm text-brand-100">
+          <div className="flex items-center gap-2 rounded-[28px] border border-brand-300 bg-brand-50 p-4 text-sm text-brand-600 dark:border-brand-400/20 dark:bg-brand-500/10 dark:text-brand-100">
             <Check className="size-4" />
             <span>{summary.itemsCount} producto{summary.itemsCount !== 1 ? 's' : ''} en tu pedido</span>
           </div>
         ) : (
           <SectionCard className="space-y-1">
-            <p className="text-xs uppercase tracking-[0.35em] text-brand-200">Pedido nuevo</p>
-            <h2 className="text-2xl font-semibold text-white">Crea tu pedido paso a paso</h2>
-            <p className="text-sm text-slate-300">
+            <p className="text-xs uppercase tracking-[0.35em] text-brand-500 dark:text-brand-200">Pedido nuevo</p>
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Crea tu pedido paso a paso</h2>
+            <p className="text-sm text-slate-600 dark:text-slate-300">
               Elegí tamaño, sabores y toppings. Después sumá tortas y completá tus datos.
             </p>
           </SectionCard>
@@ -908,16 +908,16 @@ export const OrderPage = () => {
         {STEPS.map((_, index) => renderStepSection(index))}
 
         {/* Mobile floating CTA bar */}
-        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-white/10 bg-slate-950/95 px-4 pb-3 pt-3 backdrop-blur md:hidden">
+        <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-slate-200 bg-white/95 px-4 pb-3 pt-3 backdrop-blur dark:border-white/10 dark:bg-slate-950/95 md:hidden">
           <div className="flex items-center justify-between gap-3">
             {(pots.length > 0 || cakes.length > 0) ? (
               <div className="shrink-0 text-sm">
-                <p className="text-xs text-slate-400">Total</p>
-                <p className="font-semibold text-white">$ {summary.total.toLocaleString('es-AR')}</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Total</p>
+                <p className="font-semibold text-slate-900 dark:text-white">$ {summary.total.toLocaleString('es-AR')}</p>
               </div>
             ) : (
               <div className="shrink-0 text-sm">
-                <p className="text-xs text-brand-200">Fría Tentación</p>
+                <p className="text-xs text-brand-500 dark:text-brand-200">Fría Tentación</p>
               </div>
             )}
             <div className="flex-1">{renderCTA(currentStep)}</div>

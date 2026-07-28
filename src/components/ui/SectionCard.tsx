@@ -6,7 +6,7 @@ type SectionCardProps = PropsWithChildren<{
 
 export const SectionCard = ({ children, className = '' }: SectionCardProps) => (
   <section
-    className={`rounded-[28px] border border-white/10 bg-slate-900/70 p-5 shadow-2xl shadow-slate-950/20 backdrop-blur md:p-6 ${className}`}
+    className={`rounded-[28px] border border-slate-200 bg-white/70 p-5 shadow-md backdrop-blur dark:border-white/10 dark:bg-slate-900/70 dark:shadow-2xl dark:shadow-slate-950/20 md:p-6 ${className}`}
   >
     {children}
   </section>

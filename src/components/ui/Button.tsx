@@ -9,11 +9,11 @@ type ButtonProps = PropsWithChildren<
 
 const variantClasses = {
   primary:
-    'bg-brand-500 text-white hover:bg-brand-400 focus-visible:outline-brand-300 shadow-glow disabled:bg-slate-700',
+    'bg-brand-500 text-white hover:bg-brand-400 focus-visible:outline-brand-300 shadow-glow disabled:bg-slate-300 dark:disabled:bg-slate-700',
   secondary:
-    'bg-white/10 text-slate-100 hover:bg-white/15 focus-visible:outline-brand-300 disabled:bg-white/5',
+    'bg-slate-200 text-slate-800 hover:bg-slate-300 focus-visible:outline-brand-300 dark:bg-white/10 dark:text-slate-100 dark:hover:bg-white/15 dark:disabled:bg-white/5',
   ghost:
-    'bg-transparent text-slate-200 hover:bg-white/10 focus-visible:outline-brand-300 disabled:text-slate-500',
+    'bg-transparent text-slate-600 hover:bg-slate-100 focus-visible:outline-brand-300 dark:text-slate-200 dark:hover:bg-white/10 disabled:text-slate-400 dark:disabled:text-slate-500',
 }
 
 export const Button = ({

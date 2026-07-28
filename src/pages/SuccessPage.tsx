@@ -14,33 +14,33 @@ export const SuccessPage = () => {
   return (
     <div className="mx-auto max-w-3xl">
       <SectionCard className="space-y-6 text-center">
-        <div className="mx-auto inline-flex rounded-full bg-emerald-500/15 p-4 text-emerald-200">
+        <div className="mx-auto inline-flex rounded-full bg-emerald-500/15 p-4 text-emerald-600 dark:text-emerald-200">
           <CheckCircle2 className="size-8" />
         </div>
 
         <div className="space-y-3">
-          <p className="text-sm uppercase tracking-[0.35em] text-brand-200">Pedido creado</p>
-          <h2 className="text-3xl font-semibold text-white">Tu pedido fue preparado para WhatsApp</h2>
-          <p className="text-sm text-slate-300">{appConfig.messages.pendingConfirmation}</p>
+          <p className="text-sm uppercase tracking-[0.35em] text-brand-500 dark:text-brand-200">Pedido creado</p>
+          <h2 className="text-3xl font-semibold text-slate-900 dark:text-white">Tu pedido fue preparado para WhatsApp</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-300">{appConfig.messages.pendingConfirmation}</p>
         </div>
 
         {lastOrder ? (
-          <div className="grid gap-4 rounded-[28px] border border-white/10 bg-slate-950/50 p-6 md:grid-cols-3">
+          <div className="grid gap-4 rounded-[28px] border border-slate-200 bg-slate-50 p-6 dark:border-white/10 dark:bg-slate-950/50 md:grid-cols-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Pedido</p>
-              <p className="mt-2 text-xl font-semibold text-white">{lastOrder.orderId}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Pedido</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">{lastOrder.orderId}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Cliente</p>
-              <p className="mt-2 text-xl font-semibold text-white">{lastOrder.customerName}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Cliente</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">{lastOrder.customerName}</p>
             </div>
             <div>
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">Total</p>
-              <p className="mt-2 text-xl font-semibold text-white">{formatCurrency(lastOrder.total)}</p>
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500 dark:text-slate-400">Total</p>
+              <p className="mt-2 text-xl font-semibold text-slate-900 dark:text-white">{formatCurrency(lastOrder.total)}</p>
             </div>
           </div>
         ) : (
-          <div className="rounded-3xl border border-white/10 bg-slate-950/50 p-5 text-sm text-slate-300">
+          <div className="rounded-3xl border border-slate-200 bg-slate-50 p-5 text-sm text-slate-600 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-300">
             No encontramos un pedido reciente en memoria. Si ya abriste WhatsApp, el pedido sigue pendiente de confirmacion manual.
           </div>
         )}

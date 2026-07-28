@@ -16,8 +16,8 @@ export const CakeCatalog = () => {
           <CakeSlice className="size-5" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white">Suma una torta</h2>
-          <p className="text-sm text-slate-300">Cantidad editable y precios configurados desde JSON.</p>
+          <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Suma una torta</h2>
+          <p className="text-sm text-slate-600 dark:text-slate-300">Cantidad editable y precios configurados desde JSON.</p>
         </div>
       </div>
 
@@ -28,14 +28,14 @@ export const CakeCatalog = () => {
           return (
             <article
               key={cake.id}
-              className="overflow-hidden rounded-[24px] border border-white/10 bg-slate-950/50"
+              className="overflow-hidden rounded-[24px] border border-slate-200 bg-white dark:border-white/10 dark:bg-slate-950/50"
             >
               <img src={cake.image} alt={cake.name} className="h-44 w-full object-cover" />
 
               <div className="space-y-4 p-4">
                 <div>
-                  <h3 className="text-lg font-semibold text-white">{cake.name}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{cake.description}</p>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{cake.name}</h3>
+                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{cake.description}</p>
                 </div>
 
                 <div className="flex items-center justify-between gap-3">
@@ -54,7 +54,7 @@ export const CakeCatalog = () => {
                     >
                       -
                     </Button>
-                    <span className="min-w-8 text-center text-sm text-white">{quantity}</span>
+                    <span className="min-w-8 text-center text-sm text-slate-900 dark:text-white">{quantity}</span>
                     <Button
                       variant="secondary"
                       className="h-10 w-10 rounded-full px-0 py-0"

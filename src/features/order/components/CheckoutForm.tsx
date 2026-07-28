@@ -17,8 +17,8 @@ export const CheckoutForm = ({ register, watch, errors }: CheckoutFormProps) => 
   return (
     <SectionCard className="space-y-5">
       <div>
-        <h2 className="text-xl font-semibold text-white">Tus datos</h2>
-        <p className="text-sm text-slate-300">Completa lo necesario para confirmar el pedido.</p>
+        <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Tus datos</h2>
+        <p className="text-sm text-slate-600 dark:text-slate-300">Completa lo necesario para confirmar el pedido.</p>
       </div>
 
       <input type="hidden" {...register('orderType')} />
