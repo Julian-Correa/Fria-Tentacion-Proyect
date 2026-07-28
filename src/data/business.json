@@ -1,0 +1,36 @@
+{
+  "brand": {
+    "name": "Fria Tentacion",
+    "tagline": "Helado artesanal y tortas para disfrutar en cada pedido",
+    "description": "Una experiencia fresca, premium y simple: eliges tus sabores, completas tus datos y confirmas por WhatsApp."
+  },
+  "store": {
+    "city": "Buenos Aires",
+    "pickupLabel": "Retiro en local",
+    "pickupNote": "Prepararemos tu pedido y lo confirmaremos por WhatsApp.",
+    "deliveryNote": "El horario y el radio exacto se confirman por WhatsApp."
+  },
+  "contact": {
+    "whatsappNumber": "5491173719562"
+  },
+  "currency": {
+    "code": "ARS",
+    "locale": "es-AR",
+    "symbol": "$"
+  },
+  "language": "es",
+  "rules": {
+    "maxToppingsPerPot": 3
+  },
+  "featureFlags": {
+    "darkMode": true,
+    "cakes": true,
+    "delivery": true,
+    "pickup": true,
+    "motion": true
+  },
+  "messages": {
+    "pendingConfirmation": "Tu pedido queda pendiente hasta que el local lo confirme por WhatsApp.",
+    "deliveryPending": "El horario y el radio de entrega siguen sujetos a confirmacion manual."
+  }
+}

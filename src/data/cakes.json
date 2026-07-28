@@ -1,0 +1,16 @@
+[
+  {
+    "id": "cheesecake-frutilla",
+    "name": "Cheesecake de Frutilla",
+    "description": "Base crocante, crema suave y cobertura de frutillas.",
+    "price": 9800,
+    "image": "/images/torta-cheesecake.svg"
+  },
+  {
+    "id": "torta-chocolate",
+    "name": "Torta de Chocolate",
+    "description": "Bizcochuelo humedo, relleno cremoso y terminacion intensa.",
+    "price": 11200,
+    "image": "/images/torta-chocolate.svg"
+  }
+]

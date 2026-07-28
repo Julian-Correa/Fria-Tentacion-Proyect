@@ -1,0 +1,14 @@
+[
+  {
+    "id": "quarter",
+    "label": "1/4 Kg"
+  },
+  {
+    "id": "half",
+    "label": "1/2 Kg"
+  },
+  {
+    "id": "one",
+    "label": "1 Kg"
+  }
+]

@@ -1,0 +1,7 @@
+[
+  { "id": "oreo", "name": "Oreo", "price": 700 },
+  { "id": "almendras", "name": "Almendras", "price": 900 },
+  { "id": "chispas-chocolate", "name": "Chispas de Chocolate", "price": 650 },
+  { "id": "frutillas", "name": "Frutillas", "price": 950 },
+  { "id": "salsa-ddl", "name": "Salsa de Dulce de Leche", "price": 800 }
+]
