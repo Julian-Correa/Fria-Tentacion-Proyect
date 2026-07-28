@@ -69,3 +69,10 @@
 - Razon: facilita onboarding rapido entre sesiones y centraliza setup, scripts y estructura general
 - Alternativas: depender solo de la carpeta `docs/`
 - Impacto: cualquier colaborador puede arrancar el proyecto sin recorrer primero la documentacion interna completa
+
+## ADR-011
+- Fecha: 2026-07-27
+- Decision: publicar el proyecto en GitHub usando `main` como rama principal
+- Razon: simplifica el flujo inicial de despliegue y colaboracion sobre un repositorio nuevo
+- Alternativas: usar otra rama inicial o postergar la publicacion remota
+- Impacto: la referencia remota de trabajo queda unificada desde el primer commit

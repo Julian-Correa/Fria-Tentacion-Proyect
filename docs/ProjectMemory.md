@@ -87,6 +87,7 @@
 - Catalogo actual de sabores actualizado a 52 opciones provistas por el negocio
 - Precios actuales de potes actualizados desde `src/data/prices.json`
 - README principal del proyecto creado en la raiz
+- Repositorio git inicializado y publicado en GitHub sobre rama `main`
 - Store del pedido persistido con Zustand + LocalStorage
 - Integracion de WhatsApp implementada
 - Pagina de exito implementada

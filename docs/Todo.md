@@ -9,6 +9,7 @@
 | Actualizar catalogo real de sabores | Alta | Completado | `src/data/flavors.json` reemplazado por listado provisto por el negocio |
 | Actualizar precios reales de tamanos | Alta | Completado | `src/data/prices.json` agregado como fuente de verdad de precios y limites |
 | Crear README principal | Alta | Completado | Documentacion de uso, stack, scripts y estructura |
+| Publicar repositorio en GitHub | Alta | Completado | Push realizado a `Julian-Correa/Fria-Tentacion-Proyect` |
 | Implementar flujo de pedido y resumen en vivo | Alta | Completado | Potes, toppings, tortas, retiro y delivery |
 | Implementar integracion con WhatsApp | Alta | Completado | Mensaje formateado y apertura en nueva pestana |
 | Persistir carrito en LocalStorage | Alta | Completado | Zustand persistiendo pedido y datos del cliente |

@@ -12,3 +12,4 @@
 - Actualizacion de `src/data/flavors.json` con el catalogo real de 52 sabores
 - Agregado `src/data/prices.json` y actualizacion de precios reales de tamanos
 - Creacion de `README.md` principal del proyecto
+- Publicacion inicial del proyecto en GitHub sobre la rama `main`

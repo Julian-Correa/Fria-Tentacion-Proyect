@@ -109,3 +109,16 @@
   - El proyecto expone un `README.md` raiz como punto de entrada para desarrollo y despliegue
   - Se excluyen artefactos generados de TypeScript antes de versionar
 - Siguiente paso recomendado: realizar commit y push al remoto del proyecto
+
+## 2026-07-27
+- Trabajo completado: publicacion inicial del repositorio en GitHub
+- Archivos modificados:
+  - `docs/ProjectMemory.md`
+  - `docs/Todo.md`
+  - `docs/Decisions.md`
+  - `docs/Changelog.md`
+  - `docs/SessionLog.md`
+- Decisiones tomadas:
+  - La rama principal publicada del proyecto es `main`
+  - El remoto oficial inicial queda asociado a `Julian-Correa/Fria-Tentacion-Proyect`
+- Siguiente paso recomendado: continuar con datos reales de toppings, tortas y configuracion final de negocio
