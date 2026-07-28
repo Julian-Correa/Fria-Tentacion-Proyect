@@ -10,12 +10,11 @@
 - ~~Infinite re-render loop en `OrderSummary` por selector de Zustand que creaba objeto nuevo en cada render~~ (fix: selectores individuales en `useOrder` hook)
 - El `completed` state para `toppings` con nota no se actualiza al editar secciones colapsadas (solo se actualiza al agregar el pote)
 
-## Reglas pendientes
-- TODO: definir radio de entrega
-- TODO: definir horario de entrega
+## Reglas de negocio definidas
+- Radio de entrega: se evalua manualmente por WhatsApp al recibir el pedido
+- Horario de delivery: hasta las 00hs
 
 ## Mejoras futuras
-- Confirmacion visual mas rica del estado del pedido
 - Analitica basica de interacciones
 - Internacionalizacion formal si el alcance cambia
 - Pruebas de interfaz para el flujo completo del pedido

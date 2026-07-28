@@ -20,8 +20,11 @@
 | Eliminar radios duplicados en CheckoutForm | Alta | Completado | Delivery se selecciona en paso dedicado |
 | Fix infinite loop en useOrder hook | Alta | Completado | Selectores individuales de Zustand |
 | Actualizar toppings con precios reales | Media | Completado | 7 toppings nuevos agregados |
-| Definir radio de entrega | Alta | Pendiente | TODO de negocio |
-| Definir horario de entrega | Alta | Pendiente | TODO de negocio |
+| Fix submit button en delivery | Alta | Completado | Validacion explicita al avanzar + errores visibles en review |
+| Agregar horario de delivery en UI | Alta | Completado | business.json actualizado, visible en paso delivery y formulario |
+| Eliminar TODO warning de CheckoutForm | Alta | Completado | Reemplazado por deliveryNote desde config |
+| Definir radio de entrega | Alta | Completado | Se evalua por WhatsApp al recibir el pedido |
+| Definir horario de entrega | Alta | Completado | Delivery hasta las 00hs, visible en UI |
 | Revisar alertas de `npm audit` | Media | Pendiente | `react-router-dom` y tooling aun reportan advisories upstream |
 | Eliminar `PotBuilder.tsx` inactivo | Baja | Pendiente | Quedo sin uso tras refactor a flujo inline en OrderPage |
 | Soporte multi-pote con edicion directa | Baja | Pendiente | Actualmente solo crear/eliminar, no editar potes existentes |
