@@ -3,5 +3,12 @@
   { "id": "almendras", "name": "Almendras", "price": 900 },
   { "id": "chispas-chocolate", "name": "Chispas de Chocolate", "price": 650 },
   { "id": "frutillas", "name": "Frutillas", "price": 950 },
-  { "id": "salsa-ddl", "name": "Salsa de Dulce de Leche", "price": 800 }
+  { "id": "salsa-ddl", "name": "Salsa de Dulce de Leche", "price": 800 },
+  { "id": "gomitas-acidas", "name": "Gomitas Ácidas", "price": 2000, "image": "/images/toppings/gomitas-acidas.jpg" },
+  { "id": "marron-frutilla", "name": "Marrón Frutilla", "price": 2000, "image": "/images/toppings/marron-frutilla.jpg" },
+  { "id": "gomitas-conitos", "name": "Gomitas Conitos", "price": 1000, "image": "/images/toppings/gomitas-conitos.jpg" },
+  { "id": "mani-crocante", "name": "Maní Crocante", "price": 2000, "image": "/images/toppings/mani-crocante.jpg" },
+  { "id": "chips-chocolate", "name": "Chips de Chocolate", "price": 2000, "image": "/images/toppings/chips-chocolate.jpg" },
+  { "id": "rocklets", "name": "Rocklets", "price": 2000, "image": "/images/toppings/rocklets.jpg" },
+  { "id": "marroc", "name": "Marroc", "price": 2000, "image": "/images/toppings/marroc.jpg" }
 ]
