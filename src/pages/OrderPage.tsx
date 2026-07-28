@@ -8,6 +8,7 @@ import {
   MessageCircleMore,
   Pencil,
   Plus,
+  Trash2,
   X,
 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
@@ -61,7 +62,7 @@ type CompletedData = {
 export const OrderPage = () => {
   const navigate = useNavigate()
   const { sendOrder } = useWhatsapp()
-  const { pots, cakes, customer, addPot, updatePot, updateCustomer, completeOrder, summary } = useOrder()
+  const { pots, cakes, customer, addPot, removePot, updatePot, updateCustomer, completeOrder, summary } = useOrder()
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
@@ -716,6 +717,14 @@ export const OrderPage = () => {
                             >
                               <Pencil className="size-3" />
                               Editar
+                            </button>
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 rounded-full border border-rose-300/20 px-3 py-1.5 text-xs text-rose-300 transition hover:border-rose-400/40 hover:text-rose-200"
+                              onClick={() => removePot(pot.id)}
+                            >
+                              <Trash2 className="size-3" />
+                              Eliminar
                             </button>
                           </div>
                         </div>
