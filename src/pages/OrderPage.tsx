@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   AlertTriangle,
@@ -6,6 +6,9 @@ import {
   Check,
   ChevronDown,
   MessageCircleMore,
+  Pencil,
+  Plus,
+  X,
 } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
@@ -21,26 +24,36 @@ import { customerSchema } from '@/features/order/schemas/orderSchema'
 import { useOrder } from '@/hooks/useOrder'
 import { useWhatsapp } from '@/hooks/useWhatsapp'
 import { catalog } from '@/services/catalog'
-import type { CustomerDraft } from '@/types/order'
+import type { CustomerDraft, PotToppingSelection } from '@/types/order'
 import { generateOrderId } from '@/utils/generateOrderId'
+import { getPotTotal } from '@/utils/orderCalculations'
 import { validateOrder } from '@/utils/validateOrder'
 
+type PendingPot = {
+  id: string
+  sizeId: string
+  sizeLabel: string
+  basePrice: number
+  maxFlavors: number
+  selectedFlavors: string[]
+  selectedToppings: PotToppingSelection[]
+  note: string
+}
+
 const STEPS = [
-  { key: 'size', title: 'Elige el tamaño', summary: 'Tamaño', cta: 'Elegir sabores' },
-  { key: 'flavors', title: 'Selecciona los sabores', summary: 'Sabores', cta: 'Elegir toppings' },
-  { key: 'toppings', title: 'Agrega toppings (opcional)', summary: 'Toppings', cta: 'Agregar pote al pedido' },
+  { key: 'size', title: 'Elige los tamaños', summary: 'Potes', cta: 'Elegir sabores' },
+  { key: 'flavors', title: 'Selecciona los sabores', summary: 'Sabores', cta: 'Guardar y continuar' },
+  { key: 'toppings', title: 'Agrega toppings (opcional)', summary: 'Toppings', cta: 'Guardar y continuar' },
   { key: 'cakes', title: 'Suma una torta (opcional)', summary: 'Tortas', cta: 'Continuar' },
   { key: 'delivery', title: 'Retiro o delivery', summary: 'Entrega', cta: 'Completar datos' },
   { key: 'customer', title: 'Tus datos', summary: 'Datos', cta: 'Revisar pedido' },
   { key: 'review', title: 'Revisar y confirmar', summary: 'Confirmar', cta: 'Enviar por WhatsApp' },
 ] as const
 
-type StepKey = typeof STEPS[number]['key']
-
 type CompletedData = {
   size?: string
-  flavors?: string[]
-  toppings?: string[]
+  flavors?: boolean
+  toppings?: boolean
   hasCakes?: boolean
   orderType?: string
 }
@@ -48,16 +61,20 @@ type CompletedData = {
 export const OrderPage = () => {
   const navigate = useNavigate()
   const { sendOrder } = useWhatsapp()
-  const { pots, cakes, customer, addPot, updateCustomer, completeOrder, summary } = useOrder()
+  const { pots, cakes, customer, addPot, updatePot, updateCustomer, completeOrder, summary } = useOrder()
   const [submitError, setSubmitError] = useState<string | null>(null)
 
   const [currentStep, setCurrentStep] = useState(0)
   const [completed, setCompleted] = useState<CompletedData>({})
+  const [editingPotId, setEditingPotId] = useState<string | null>(null)
+  const returnStepRef = useRef(0)
 
-  // Draft pot state
+  // Multi-pot state
+  const [pendingPots, setPendingPots] = useState<PendingPot[]>([])
+  const [activePotIndex, setActivePotIndex] = useState(0)
   const [sizeId, setSizeId] = useState('')
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([])
-  const [selectedToppings, setSelectedToppings] = useState<string[]>([])
+  const [selectedToppings, setSelectedToppings] = useState<PotToppingSelection[]>([])
   const [note, setNote] = useState('')
   const [stepError, setStepError] = useState<string | null>(null)
 
@@ -78,7 +95,7 @@ export const OrderPage = () => {
     return () => subscription.unsubscribe()
   }, [formWatch, updateCustomer])
 
-  const selectedSize = catalog.sizes.find((s) => s.id === sizeId)
+  const isEditing = editingPotId !== null
 
   const goToStep = (index: number) => {
     setCurrentStep(index)
@@ -95,16 +112,99 @@ export const OrderPage = () => {
     }
   }
 
-  const toggleFlavor = (flavorName: string) => {
-    if (!selectedSize) {
-      setStepError('Selecciona el tamaño antes de elegir sabores.')
+  const updatePendingPot = useCallback((index: number, updates: Partial<PendingPot>) => {
+    setPendingPots((prev) => prev.map((p, i) => (i === index ? { ...p, ...updates } : p)))
+  }, [])
+
+  const loadPotFlavors = useCallback((index: number) => {
+    const pot = pendingPots[index]
+    if (!pot) return
+    setSizeId(pot.sizeId)
+    setSelectedFlavors(pot.selectedFlavors)
+    setNote(pot.note)
+  }, [pendingPots])
+
+  const loadPotToppings = useCallback((index: number) => {
+    const pot = pendingPots[index]
+    if (!pot) return
+    setSelectedToppings(pot.selectedToppings)
+    setNote(pot.note)
+  }, [pendingPots])
+
+  const handleEditPot = (potId: string) => {
+    const pot = pots.find((p) => p.id === potId)
+    if (!pot) return
+
+    returnStepRef.current = currentStep
+    setEditingPotId(potId)
+    setPendingPots([{
+      id: pot.id,
+      sizeId: pot.sizeId,
+      sizeLabel: pot.sizeLabel,
+      basePrice: pot.basePrice,
+      maxFlavors: pot.maxFlavors,
+      selectedFlavors: pot.flavors,
+      selectedToppings: pot.toppings,
+      note: pot.note,
+    }])
+    setSizeId(pot.sizeId)
+    setActivePotIndex(0)
+    setSelectedFlavors(pot.flavors)
+    setSelectedToppings(pot.toppings)
+    setNote(pot.note)
+    setStepError(null)
+    goToStep(0)
+  }
+
+  const handleCancelEdit = () => {
+    setEditingPotId(null)
+    setPendingPots([])
+    setSizeId('')
+    setSelectedFlavors([])
+    setSelectedToppings([])
+    setNote('')
+    setStepError(null)
+    goToStep(returnStepRef.current)
+  }
+
+  const handleAddPendingPot = () => {
+    const size = catalog.sizes.find((s) => s.id === sizeId)
+    if (!size) {
+      setStepError('Selecciona un tamaño válido.')
       return
     }
     setStepError(null)
+    setPendingPots((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        sizeId: size.id,
+        sizeLabel: size.label,
+        basePrice: size.price,
+        maxFlavors: size.maxFlavors,
+        selectedFlavors: [],
+        selectedToppings: [],
+        note: '',
+      },
+    ])
+    setSizeId('')
+  }
+
+  const handleRemovePendingPot = (index: number) => {
+    setPendingPots((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const toggleFlavor = (flavorName: string) => {
+    const pot = pendingPots[activePotIndex]
+    if (!pot) return
+    const size = catalog.sizes.find((s) => s.id === pot.sizeId)
+    if (!size) return
+
+    setStepError(null)
     setSelectedFlavors((prev) => {
       if (prev.includes(flavorName)) return prev.filter((f) => f !== flavorName)
-      if (prev.length >= selectedSize.maxFlavors) {
-        setStepError(`El tamaño ${selectedSize.label} permite hasta ${selectedSize.maxFlavors} sabores.`)
+      if (prev.length >= size.maxFlavors) {
+        setStepError(`El tamaño ${size.label} permite hasta ${size.maxFlavors} sabores.`)
         return prev
       }
       return [...prev, flavorName]
@@ -114,57 +214,116 @@ export const OrderPage = () => {
   const toggleTopping = (toppingId: string) => {
     setStepError(null)
     setSelectedToppings((prev) => {
-      if (prev.includes(toppingId)) return prev.filter((t) => t !== toppingId)
+      if (prev.some((t) => t.id === toppingId)) return prev.filter((t) => t.id !== toppingId)
       if (prev.length >= catalog.business.rules.maxToppingsPerPot) {
         setStepError(`Puedes elegir hasta ${catalog.business.rules.maxToppingsPerPot} toppings.`)
         return prev
       }
-      return [...prev, toppingId]
+      const topping = catalog.toppings.find((t) => t.id === toppingId)
+      if (!topping) return prev
+      return [...prev, { id: topping.id, name: topping.name, price: topping.price }]
     })
   }
 
-  const handleAddPot = () => {
-    const size = catalog.sizes.find((s) => s.id === sizeId)
-    if (!size) {
-      setStepError('Selecciona un tamaño válido.')
+  const handleSaveFlavors = () => {
+    const pot = pendingPots[activePotIndex]
+    if (!pot) return
+    if (selectedFlavors.length === 0) {
+      setStepError('Seleccioná al menos un sabor para continuar.')
       return
     }
 
-    const pot = {
-      id: crypto.randomUUID(),
-      sizeId: size.id,
-      sizeLabel: size.label,
-      basePrice: size.price,
-      maxFlavors: size.maxFlavors,
-      flavors: selectedFlavors,
-      toppings: catalog.toppings.filter((t) => selectedToppings.includes(t.id)),
-      note: note.trim(),
+    updatePendingPot(activePotIndex, { selectedFlavors, note: note.trim() })
+
+    const isLastPot = activePotIndex >= pendingPots.length - 1
+    if (isLastPot) {
+      setActivePotIndex(0)
+      setSelectedToppings(pendingPots[0]?.selectedToppings ?? [])
+      setNote(pendingPots[0]?.note ?? '')
+      completeCurrentStep()
+    } else {
+      const nextIndex = activePotIndex + 1
+      setActivePotIndex(nextIndex)
+      loadPotFlavors(nextIndex)
     }
+  }
 
-    const validation = validateOrder({
-      pots: [pot],
-      cakes: [],
-      customer: { orderType: 'pickup', name: 'Temp', phone: '', street: '', number: '', crossStreets: '', floor: '', apartment: '', observations: '' },
-    })
+  const handleSaveToppings = () => {
+    const isLastPot = activePotIndex >= pendingPots.length - 1
 
-    if (!validation.success) {
-      setStepError(validation.error.issues[0]?.message ?? 'No pudimos agregar el pote.')
+    if (!isLastPot) {
+      updatePendingPot(activePotIndex, { selectedToppings, note: note.trim() })
+      const nextIndex = activePotIndex + 1
+      setActivePotIndex(nextIndex)
+      loadPotToppings(nextIndex)
       return
     }
 
-    addPot(pot)
-    setCompleted((prev) => ({
-      ...prev,
-      size: size.label,
-      flavors: selectedFlavors,
-      toppings: selectedToppings.length > 0 ? selectedToppings.map((id) => catalog.toppings.find((t) => t.id === id)?.name ?? id) : undefined,
-    }))
+    // Compute final pot data before any state updates (avoids stale closures)
+    const finalPots = pendingPots.map((p, i) =>
+      i === activePotIndex
+        ? { ...p, selectedToppings, note: note.trim() }
+        : p,
+    )
+
+    updatePendingPot(activePotIndex, { selectedToppings, note: note.trim() })
+
+    if (isEditing) {
+      const updated = finalPots[0]
+      updatePot(editingPotId, {
+        id: editingPotId,
+        sizeId: updated.sizeId,
+        sizeLabel: updated.sizeLabel,
+        basePrice: updated.basePrice,
+        maxFlavors: updated.maxFlavors,
+        flavors: updated.selectedFlavors,
+        toppings: updated.selectedToppings,
+        note: updated.note,
+      })
+      setEditingPotId(null)
+    } else {
+      const potsToAdd = finalPots.map((p) => ({
+        id: p.id,
+        sizeId: p.sizeId,
+        sizeLabel: p.sizeLabel,
+        basePrice: p.basePrice,
+        maxFlavors: p.maxFlavors,
+        flavors: p.selectedFlavors,
+        toppings: p.selectedToppings,
+        note: p.note,
+      }))
+
+      const validation = validateOrder({
+        pots: potsToAdd,
+        cakes: [],
+        customer: { orderType: 'pickup' as const, name: 'Temp', phone: '', street: '', number: '', crossStreets: '', floor: '', apartment: '', observations: '' },
+      })
+
+      if (!validation.success) {
+        setStepError(validation.error.issues[0]?.message ?? 'No pudimos agregar los potes.')
+        return
+      }
+
+      potsToAdd.forEach((pot) => addPot(pot))
+    }
+
+    setPendingPots([])
+    setActivePotIndex(0)
     setSizeId('')
     setSelectedFlavors([])
     setSelectedToppings([])
     setNote('')
     setStepError(null)
-    completeCurrentStep(3)
+
+    setCompleted((prev) => ({
+      ...prev,
+      size: isEditing ? prev.size : `${finalPots.length} pote${finalPots.length > 1 ? 's' : ''}`,
+      flavors: true,
+      toppings: true,
+    }))
+
+    const next = isEditing ? returnStepRef.current : 3
+    completeCurrentStep(next)
   }
 
   const handleConfirmOrder = form.handleSubmit((formData) => {
@@ -206,14 +365,12 @@ export const OrderPage = () => {
         case 'size':
           return completed.size ? <p className="text-white">{completed.size}</p> : null
         case 'flavors':
-          return completed.flavors?.length ? (
-            <ul className="text-xs text-slate-300">
-              {completed.flavors.map((f) => <li key={f}>{f}</li>)}
-            </ul>
+          return completed.flavors ? (
+            <p className="text-xs text-slate-300">Sabores seleccionados</p>
           ) : null
         case 'toppings':
-          return completed.toppings?.length ? (
-            <p className="text-white">{completed.toppings.join(', ')}</p>
+          return completed.toppings ? (
+            <p className="text-xs text-slate-300">Toppings seleccionados</p>
           ) : (
             <p className="text-xs text-slate-400">Sin toppings</p>
           )
@@ -238,7 +395,14 @@ export const OrderPage = () => {
           <button
             type="button"
             className="w-full rounded-[28px] border border-white/10 bg-slate-900/70 p-5 text-left shadow-2xl shadow-slate-950/20 backdrop-blur transition hover:border-brand-400/40 md:p-6"
-            onClick={() => goToStep(index)}
+            onClick={() => {
+              if (pots.length > 0 && !editingPotId && index < 3) {
+                const lastPot = pots[pots.length - 1]
+                handleEditPot(lastPot.id)
+              } else {
+                goToStep(index)
+              }
+            }}
           >
             <div className="flex items-start justify-between gap-4">
               <div className="flex items-start gap-3">
@@ -264,79 +428,197 @@ export const OrderPage = () => {
               <h2 className="text-xl font-semibold text-white">{step.title}</h2>
             </div>
 
-            {step.key === 'size' ? (
-              <div className="grid gap-3 sm:grid-cols-3">
-                {catalog.sizes.map((size) => (
-                  <button
-                    key={size.id}
-                    type="button"
-                    className={`rounded-3xl border p-4 text-left transition ${sizeId === size.id ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/50 hover:border-brand-400/40'}`}
-                    onClick={() => { setSizeId(size.id); setStepError(null) }}
-                  >
-                    <p className="text-sm text-slate-300">Tamaño</p>
-                    <p className="mt-1 text-lg font-semibold text-white">{size.label}</p>
-                    <p className="mt-1 text-sm text-brand-100">$ {size.price.toLocaleString('es-AR')}</p>
-                    <p className="mt-3 text-xs text-slate-400">Hasta {size.maxFlavors} sabores</p>
-                  </button>
-                ))}
+            {editingPotId && (
+              <div className="flex items-center justify-between rounded-3xl border border-amber-300/20 bg-amber-500/10 px-4 py-3">
+                <p className="text-sm text-amber-200">Editando pote existente</p>
+                <button
+                  type="button"
+                  className="flex items-center gap-1.5 text-sm text-slate-300 transition hover:text-white"
+                  onClick={handleCancelEdit}
+                >
+                  <X className="size-4" />
+                  Cancelar
+                </button>
+              </div>
+            )}
+
+            {step.key === 'size' && !isEditing ? (
+              <div className="space-y-4">
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {catalog.sizes.map((size) => (
+                    <button
+                      key={size.id}
+                      type="button"
+                      className={`rounded-3xl border p-4 text-left transition ${sizeId === size.id ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/50 hover:border-brand-400/40'}`}
+                      onClick={() => { setSizeId(size.id); setStepError(null) }}
+                    >
+                      <p className="text-sm text-slate-300">Tamaño</p>
+                      <p className="mt-1 text-lg font-semibold text-white">{size.label}</p>
+                      <p className="mt-1 text-sm text-brand-100">$ {size.price.toLocaleString('es-AR')}</p>
+                      <p className="mt-3 text-xs text-slate-400">Hasta {size.maxFlavors} sabores</p>
+                    </button>
+                  ))}
+                </div>
+
+                {sizeId ? (
+                  <Button variant="secondary" fullWidth className="gap-2" onClick={handleAddPendingPot}>
+                    <Plus className="size-4" />
+                    Agregar pote de {catalog.sizes.find((s) => s.id === sizeId)?.label}
+                  </Button>
+                ) : null}
+
+                {pendingPots.length > 0 ? (
+                  <div className="space-y-2">
+                    <p className="text-sm text-slate-400">
+                      {pendingPots.length} pote{pendingPots.length > 1 ? 's' : ''} agregado{pendingPots.length > 1 ? 's' : ''}:
+                    </p>
+                    <div className="space-y-2">
+                      {pendingPots.map((pot, i) => (
+                        <div
+                          key={pot.id}
+                          className="flex items-center justify-between rounded-2xl border border-white/10 bg-slate-950/50 px-4 py-3"
+                        >
+                          <span className="text-sm text-white">
+                            Pote {i + 1}: {pot.sizeLabel}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => handleRemovePendingPot(i)}
+                            className="rounded-full p-1 text-slate-400 transition hover:bg-rose-500/20 hover:text-rose-300"
+                          >
+                            <X className="size-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="text-center text-sm text-slate-500">Agregá al menos un pote para continuar</p>
+                )}
+              </div>
+            ) : null}
+
+            {step.key === 'size' && isEditing ? (
+              <div className="rounded-3xl border border-brand-300/20 bg-brand-400/10 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-slate-400">Editando</p>
+                    <p className="text-lg font-semibold text-white">{pendingPots[0]?.sizeLabel}</p>
+                  </div>
+                  <Button variant="ghost" className="px-3 py-1.5 text-xs" onClick={() => goToStep(1)}>
+                    Cambiar sabores
+                  </Button>
+                </div>
               </div>
             ) : null}
 
             {step.key === 'flavors' ? (
               <div className="space-y-3">
-                <p className="text-sm text-slate-400">
-                  {selectedSize
-                    ? `Seleccionados ${selectedFlavors.length} de ${selectedSize.maxFlavors}`
-                    : 'Primero selecciona un tamaño'}
-                </p>
-                <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
-                  {catalog.flavors.map((flavor) => {
-                    const isSelected = selectedFlavors.includes(flavor.name)
-                    return (
-                      <button
-                        key={flavor.id}
-                        type="button"
-                        className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-brand-400/40'}`}
-                        onClick={() => toggleFlavor(flavor.name)}
+                {pendingPots.length > 1 ? (
+                  <div className="flex items-center gap-2 text-sm">
+                    {pendingPots.map((_, i) => (
+                      <span
+                        key={i}
+                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-200' : 'bg-slate-800 text-slate-500'}`}
                       >
-                        {flavor.name}
-                      </button>
-                    )
-                  })}
-                </div>
+                        {i + 1}
+                      </span>
+                    ))}
+                    <span className="ml-1 text-slate-400">
+                      Pote {activePotIndex + 1} de {pendingPots.length}
+                    </span>
+                  </div>
+                ) : null}
+
+                {pendingPots[activePotIndex] ? (
+                  <>
+                    <p className="text-sm text-slate-400">
+                      {(() => {
+                        const pot = pendingPots[activePotIndex]
+                        const size = catalog.sizes.find((s) => s.id === pot.sizeId)
+                        if (!size) return ''
+                        return `${pot.sizeLabel} — Seleccionados ${selectedFlavors.length} de ${size.maxFlavors}`
+                      })()}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
+                      {catalog.flavors.map((flavor) => {
+                        const isSelected = selectedFlavors.includes(flavor.name)
+                        return (
+                          <button
+                            key={flavor.id}
+                            type="button"
+                            className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-white/10 bg-slate-950/40 text-slate-300 hover:border-brand-400/40'}`}
+                            onClick={() => toggleFlavor(flavor.name)}
+                          >
+                            {flavor.name}
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <label className="flex flex-col gap-2 text-sm text-slate-200">
+                      <span>Nota del pote (opcional)</span>
+                      <textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        placeholder="Ejemplo: envío con cucharitas."
+                        className="min-h-24 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-brand-400"
+                      />
+                    </label>
+                  </>
+                ) : null}
               </div>
             ) : null}
 
             {step.key === 'toppings' ? (
               <div className="space-y-3">
-                <p className="text-sm text-slate-400">
-                  Hasta {catalog.business.rules.maxToppingsPerPot}. Todos tienen costo adicional.
-                </p>
-                <div className="grid gap-2 md:grid-cols-2">
-                  {catalog.toppings.map((topping) => {
-                    const isSelected = selectedToppings.includes(topping.id)
-                    return (
-                      <button
-                        key={topping.id}
-                        type="button"
-                        className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${isSelected ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/40 hover:border-brand-400/40'}`}
-                        onClick={() => toggleTopping(topping.id)}
+                {pendingPots.length > 1 ? (
+                  <div className="flex items-center gap-2 text-sm">
+                    {pendingPots.map((_, i) => (
+                      <span
+                        key={i}
+                        className={`flex size-7 items-center justify-center rounded-full text-xs font-semibold transition ${i === activePotIndex ? 'bg-brand-500 text-white' : i < activePotIndex ? 'bg-brand-400/20 text-brand-200' : 'bg-slate-800 text-slate-500'}`}
                       >
-                        <span className="text-sm text-white">{topping.name}</span>
-                        <span className="text-sm text-brand-100">+$ {topping.price.toLocaleString('es-AR')}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-                <label className="flex flex-col gap-2 text-sm text-slate-200">
-                  <span>Nota del pote (opcional)</span>
-                  <textarea
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    placeholder="Ejemplo: envío con cucharitas."
-                    className="min-h-24 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-brand-400"
-                  />
-                </label>
+                        {i + 1}
+                      </span>
+                    ))}
+                    <span className="ml-1 text-slate-400">
+                      Pote {activePotIndex + 1} de {pendingPots.length}
+                    </span>
+                  </div>
+                ) : null}
+
+                {pendingPots[activePotIndex] ? (
+                  <>
+                    <p className="text-sm text-slate-400">
+                      Hasta {catalog.business.rules.maxToppingsPerPot}. Todos tienen costo adicional.
+                    </p>
+                    <div className="grid gap-2 md:grid-cols-2">
+                      {catalog.toppings.map((topping) => {
+                        const isSelected = selectedToppings.some((t) => t.id === topping.id)
+                        return (
+                          <button
+                            key={topping.id}
+                            type="button"
+                            className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${isSelected ? 'border-brand-300 bg-brand-400/15' : 'border-white/10 bg-slate-950/40 hover:border-brand-400/40'}`}
+                            onClick={() => toggleTopping(topping.id)}
+                          >
+                            <span className="text-sm text-white">{topping.name}</span>
+                            <span className="text-sm text-brand-100">+$ {topping.price.toLocaleString('es-AR')}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                    <label className="flex flex-col gap-2 text-sm text-slate-200">
+                      <span>Nota del pote (opcional)</span>
+                      <textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        placeholder="Ejemplo: envío con cucharitas."
+                        className="min-h-24 rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm text-slate-50 outline-none transition placeholder:text-slate-500 focus:border-brand-400"
+                      />
+                    </label>
+                  </>
+                ) : null}
               </div>
             ) : null}
 
@@ -405,6 +687,63 @@ export const OrderPage = () => {
                   Revisá tu pedido antes de confirmar. Al enviar se abre WhatsApp con el resumen.
                 </p>
 
+                {pots.length > 0 ? (
+                  <div className="space-y-3">
+                    <p className="text-sm font-semibold text-white">Potes</p>
+                    {pots.map((pot) => (
+                      <article key={pot.id} className="rounded-3xl border border-white/10 bg-slate-950/50 p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="space-y-2">
+                            <p className="font-semibold text-white">{pot.sizeLabel}</p>
+                            <ul className="space-y-1 text-sm text-slate-300">
+                              {pot.flavors.map((flavor) => (
+                                <li key={flavor}>- {flavor}</li>
+                              ))}
+                            </ul>
+                            {pot.toppings.length > 0 ? (
+                              <p className="text-sm text-slate-400">
+                                Toppings: {pot.toppings.map((t) => t.name).join(', ')}
+                              </p>
+                            ) : null}
+                            {pot.note ? <p className="text-sm text-slate-500">Nota: {pot.note}</p> : null}
+                          </div>
+                          <div className="flex flex-col items-end gap-2">
+                            <p className="whitespace-nowrap font-semibold text-brand-100">$ {getPotTotal(pot).toLocaleString('es-AR')}</p>
+                            <button
+                              type="button"
+                              className="flex items-center gap-1.5 rounded-full border border-white/10 px-3 py-1.5 text-xs text-slate-300 transition hover:border-brand-400/40 hover:text-brand-200"
+                              onClick={() => handleEditPot(pot.id)}
+                            >
+                              <Pencil className="size-3" />
+                              Editar
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : null}
+
+                {cakes.length > 0 ? (
+                  <div className="space-y-3">
+                    <p className="text-sm font-semibold text-white">Tortas</p>
+                    {cakes.map((cake) => (
+                      <article
+                        key={cake.cakeId}
+                        className="flex items-center justify-between gap-4 rounded-3xl border border-white/10 bg-slate-950/50 p-4"
+                      >
+                        <div>
+                          <p className="font-semibold text-white">{cake.name}</p>
+                          <p className="text-sm text-slate-400">Cantidad: {cake.quantity}</p>
+                        </div>
+                        <p className="whitespace-nowrap font-semibold text-brand-100">
+                          $ {(cake.price * cake.quantity).toLocaleString('es-AR')}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+                ) : null}
+
                 {submitError ? (
                   <div className="flex items-start gap-3 rounded-3xl border border-rose-300/20 bg-rose-500/10 p-4 text-sm text-rose-100">
                     <AlertTriangle className="mt-0.5 size-4 shrink-0" />
@@ -443,9 +782,9 @@ export const OrderPage = () => {
     const step = STEPS[index]
     switch (step.key) {
       case 'size':
-        return sizeId !== ''
+        return !isEditing && pendingPots.length > 0
       case 'flavors':
-        return selectedSize ? selectedFlavors.length > 0 : false
+        return selectedFlavors.length > 0
       case 'toppings':
         return true
       case 'cakes':
@@ -461,25 +800,37 @@ export const OrderPage = () => {
     }
   }
 
+  const getFlavorsCTA = () => {
+    const isLastPot = activePotIndex >= pendingPots.length - 1
+    return isLastPot ? 'Continuar a toppings' : 'Guardar y siguiente'
+  }
+
+  const getToppingsCTA = () => {
+    if (isEditing) return 'Guardar cambios'
+    const isLastPot = activePotIndex >= pendingPots.length - 1
+    return isLastPot ? 'Agregar al pedido' : 'Guardar y siguiente'
+  }
+
   const handleCTAClick = (index: number) => {
     const step = STEPS[index]
     setStepError(null)
     switch (step.key) {
       case 'size':
-        if (sizeId) {
-          const size = catalog.sizes.find((s) => s.id === sizeId)
-          if (size) setCompleted((prev) => ({ ...prev, size: size.label }))
+        if (pendingPots.length > 0) {
+          setActivePotIndex(0)
+          loadPotFlavors(0)
+          setCompleted((prev) => ({
+            ...prev,
+            size: `${pendingPots.length} pote${pendingPots.length > 1 ? 's' : ''}`,
+          }))
           completeCurrentStep()
-        } else setStepError('Seleccioná un tamaño para continuar.')
+        } else setStepError('Agregá al menos un pote para continuar.')
         break
       case 'flavors':
-        if (selectedFlavors.length > 0) {
-          setCompleted((prev) => ({ ...prev, flavors: selectedFlavors }))
-          completeCurrentStep()
-        } else setStepError('Seleccioná al menos un sabor para continuar.')
+        handleSaveFlavors()
         break
       case 'toppings':
-        handleAddPot()
+        handleSaveToppings()
         break
       case 'cakes':
         setCompleted((prev) => ({ ...prev, hasCakes: cakes.length > 0 }))
@@ -510,6 +861,9 @@ export const OrderPage = () => {
         </Button>
       )
     }
+    let ctaText: string = step.cta
+    if (step.key === 'flavors') ctaText = getFlavorsCTA()
+    else if (step.key === 'toppings') ctaText = getToppingsCTA()
     return (
       <Button
         fullWidth
@@ -517,7 +871,7 @@ export const OrderPage = () => {
         disabled={!canAdvance(index)}
         onClick={() => handleCTAClick(index)}
       >
-        {step.cta}
+        {ctaText}
         <ArrowRight className="size-4" />
       </Button>
     )
@@ -563,7 +917,7 @@ export const OrderPage = () => {
       </div>
 
       <div className="hidden xl:block">
-        <OrderSummary />
+        <OrderSummary onEditPot={handleEditPot} />
       </div>
     </div>
   )

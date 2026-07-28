@@ -1,4 +1,4 @@
-import { ShoppingBag, Trash2 } from 'lucide-react'
+import { Pencil, ShoppingBag, Trash2 } from 'lucide-react'
 
 import { Button } from '@/components/ui/Button'
 import { SectionCard } from '@/components/ui/SectionCard'
@@ -6,7 +6,11 @@ import { useOrder } from '@/hooks/useOrder'
 import { formatCurrency } from '@/utils/formatCurrency'
 import { getCakeTotal, getPotTotal } from '@/utils/orderCalculations'
 
-export const OrderSummary = () => {
+type OrderSummaryProps = {
+  onEditPot?: (potId: string) => void
+}
+
+export const OrderSummary = ({ onEditPot }: OrderSummaryProps) => {
   const { pots, cakes, removePot, setCakeQuantity, summary } = useOrder()
 
   return (
@@ -54,13 +58,24 @@ export const OrderSummary = () => {
 
                 <div className="flex flex-col items-end gap-3">
                   <p className="font-semibold text-brand-100">{formatCurrency(getPotTotal(pot))}</p>
-                  <Button
-                    variant="ghost"
-                    className="px-2 py-2 text-rose-200 hover:bg-rose-500/10"
-                    onClick={() => removePot(pot.id)}
-                  >
-                    <Trash2 className="size-4" />
-                  </Button>
+                  <div className="flex items-center gap-1">
+                    {onEditPot ? (
+                      <Button
+                        variant="ghost"
+                        className="px-2 py-2 text-slate-300 hover:bg-brand-500/10 hover:text-brand-200"
+                        onClick={() => onEditPot(pot.id)}
+                      >
+                        <Pencil className="size-4" />
+                      </Button>
+                    ) : null}
+                    <Button
+                      variant="ghost"
+                      className="px-2 py-2 text-rose-200 hover:bg-rose-500/10"
+                      onClick={() => removePot(pot.id)}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             </article>

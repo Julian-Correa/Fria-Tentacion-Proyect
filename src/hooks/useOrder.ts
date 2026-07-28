@@ -8,6 +8,7 @@ export const useOrder = () => {
   const lastOrder = useOrderStore((state) => state.lastOrder)
   const addPot = useOrderStore((state) => state.addPot)
   const removePot = useOrderStore((state) => state.removePot)
+  const updatePot = useOrderStore((state) => state.updatePot)
   const setCakeQuantity = useOrderStore((state) => state.setCakeQuantity)
   const updateCustomer = useOrderStore((state) => state.updateCustomer)
   const completeOrder = useOrderStore((state) => state.completeOrder)
@@ -21,6 +22,7 @@ export const useOrder = () => {
     lastOrder,
     addPot,
     removePot,
+    updatePot,
     setCakeQuantity,
     updateCustomer,
     completeOrder,

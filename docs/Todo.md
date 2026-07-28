@@ -25,6 +25,6 @@
 | Eliminar TODO warning de CheckoutForm | Alta | Completado | Reemplazado por deliveryNote desde config |
 | Definir radio de entrega | Alta | Completado | Se evalua por WhatsApp al recibir el pedido |
 | Definir horario de entrega | Alta | Completado | Delivery hasta las 00hs, visible en UI |
-| Revisar alertas de `npm audit` | Media | Pendiente | `react-router-dom` y tooling aun reportan advisories upstream |
-| Eliminar `PotBuilder.tsx` inactivo | Baja | Pendiente | Quedo sin uso tras refactor a flujo inline en OrderPage |
-| Soporte multi-pote con edicion directa | Baja | Pendiente | Actualmente solo crear/eliminar, no editar potes existentes |
+| Revisar alertas de `npm audit` | Media | Completado | `react-router-dom@7.18.1` (última versión, advisory solo afecta RSC — no usado), `brace-expansion` en ESLint (dev-only, bajo riesgo). Build y tests OK |
+| Eliminar `PotBuilder.tsx` inactivo | Baja | Completado | Eliminado en commit `ad7dc06` |
+| Soporte multi-pote con edicion directa | Media | Completado | Paso 1 permite agregar varios potes, pasos 2-3 se repiten por cada pote |

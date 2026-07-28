@@ -23,6 +23,7 @@ type OrderStore = {
   lastOrder: LastOrder | null
   addPot: (pot: PotCartItem) => void
   removePot: (potId: string) => void
+  updatePot: (potId: string, pot: PotCartItem) => void
   setCakeQuantity: (cake: Omit<CakeCartItem, 'quantity'>, quantity: number) => void
   updateCustomer: (customer: Partial<CustomerDraft>) => void
   completeOrder: (lastOrder: LastOrder) => void
@@ -44,6 +45,10 @@ export const useOrderStore = create<OrderStore>()(
       removePot: (potId) =>
         set((state) => ({
           pots: state.pots.filter((pot) => pot.id !== potId),
+        })),
+      updatePot: (potId, updatedPot) =>
+        set((state) => ({
+          pots: state.pots.map((pot) => (pot.id === potId ? updatedPot : pot)),
         })),
       setCakeQuantity: (cake, quantity) =>
         set((state) => {

@@ -20,9 +20,9 @@
 - `utils/`: utilidades puras
 
 ## Flujo de pedido (8 pasos progresivos)
-1. Elegir tamano del pote
-2. Seleccionar sabores (validacion segun limite del tamano)
-3. Agregar toppings opcionales (max 3, con costo adicional)
+1. Elegir tamanos de potes (multi-pote: se pueden agregar varios potes antes de continuar)
+2. Seleccionar sabores (se repite por cada pote, con indicador de progreso)
+3. Agregar toppings opcionales (se repite por cada pote, max 3, con costo adicional)
 4. Sumar tortas opcionales
 5. Elegir retiro o delivery
 6. Completar datos del cliente (nombre, telefono, direccion si es delivery)
@@ -34,12 +34,14 @@ Cada paso colapsa al completarse con resumen visible. El usuario puede reabrir p
 ## Flujo de estado
 1. La app carga configuracion y datos estaticos
 2. El usuario avanza paso a paso por el flujo progresivo
-3. Los pasos 0-2 construyen un pote que se agrega al carrito
-4. El store calcula resumen, subtotal y total en vivo
-5. El formulario valida datos del cliente segun tipo de entrega
-6. Se genera un ID corto de pedido
-7. Se arma y abre el mensaje de WhatsApp
-8. Se navega a la pagina de exito
+3. Paso 1: se agregan potes pendientes (solo con tamano) a estado local
+4. Pasos 2-3: sabores y toppings se asignan a cada pote pendiente individualmente
+5. Al completar toppings del ultimo pote, todos los potes se agregan al store simultaneamente
+6. El store calcula resumen, subtotal y total en vivo
+7. El formulario valida datos del cliente segun tipo de entrega
+8. Se genera un ID corto de pedido
+9. Se arma y abre el mensaje de WhatsApp
+10. Se navega a la pagina de exito
 
 ## UI/UX
 - Sin landing page: la app abre directamente en `/pedido`

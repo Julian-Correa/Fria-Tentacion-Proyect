@@ -23,3 +23,11 @@
 - Fix de infinite re-render loop en `useOrder` hook (selectores de Zustand individuales)
 - Actualizacion del `completed` state al editar tamano/sabores desde secciones colapsadas
 - Agregado de 7 nuevos toppings con precios reales a `toppings.json`
+- Implementacion de seleccion multi-pote en paso 1 (tamanos): se pueden agregar varios potes antes de pasar a sabores
+- Paso 2 (sabores) y paso 3 (toppings) repetidos por cada pote con indicador de progreso (Pote X de Y)
+- Los sabores del primer pote persisten al pasar al siguiente (misma card reutilizada)
+- CTA contextual: "Guardar y siguiente" / "Continuar a toppings" / "Agregar al pedido"
+- Al terminar toppings del ultimo pote, todos los potes se agregan al store simultaneamente
+- Flujo de edicion adaptado al nuevo modelo multi-pote
+- Revision de alertas `npm audit`: react-router-dom@7.18.1, eslint mantenido en 9.x
+- Actualizacion de documentacion completa

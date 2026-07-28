@@ -147,3 +147,22 @@
   - Separar seleccion de delivery como paso independiente (no dentro del formulario de datos)
   - Selectores individuales de Zustand en useOrder para evitar infinite re-renders
 - Siguiente paso recomendado: definir radio y horario de entrega, evaluar eliminar PotBuilder.tsx inactivo
+
+## 2026-07-28
+- Trabajo completado: implementacion de seleccion multi-pote, revision npm audit, actualizacion de documentacion
+- Archivos modificados:
+  - `src/pages/OrderPage.tsx`
+  - `docs/Changelog.md`
+  - `docs/Todo.md`
+  - `docs/KnownIssues.md`
+  - `docs/Architecture.md`
+  - `docs/FileIndex.md`
+  - `docs/SessionLog.md`
+  - `docs/ProjectMemory.md`
+- Decisiones tomadas:
+  - Paso 1 permite agregar multiples potes antes de pasar a sabores
+  - Pasos 2 (sabores) y 3 (toppings) se repiten por cada pote con UI de progreso
+  - Los potes se agregan al store solo cuando todos tienen sabores y toppings
+  - `react-router-dom` se mantiene en 7.18.1 (latest). Advisory de CSRF solo afecta modo RSC, no usado.
+  - ESLint se mantiene en 9.x por compatibilidad con plugins
+- Siguiente paso recomendado: probar el flujo completo en el navegador, evaluar si se necesita edicion directa de potes desde el resumen

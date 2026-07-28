@@ -30,8 +30,8 @@
 - Validacion con Zod y formularios con React Hook Form
 
 ## Arquitectura implementada
-- `src/pages/`: `OrderPage` con flujo progresivo de 8 pasos, `SuccessPage` y `NotFoundPage`
-- `src/features/order/`: constructor de potes, validaciones y resumen (PotBuilder inactivo, reemplazado por flujo inline en OrderPage)
+- `src/pages/`: `OrderPage` con flujo progresivo de 8 pasos (multi-pote en paso 1, pasos 2-3 repetidos por pote), `SuccessPage` y `NotFoundPage`
+- `src/features/order/`: validaciones, resumen y formulario de datos
 - `src/features/catalog/`: catalogo de tortas
 - `src/components/ui/`: primitives reutilizables
 - `src/layouts/`: shell principal de la aplicacion sin navegacion interna
@@ -82,9 +82,9 @@
 - `src/styles/`
 
 ## Flujo de pedido (8 pasos progresivos)
-1. Elegir tamano del pote
-2. Seleccionar sabores (validacion de limite segun tamano)
-3. Agregar toppings opcionales (max 3, con costo)
+1. Elegir tamanos de potes (multi-pote: se pueden agregar varios antes de continuar)
+2. Seleccionar sabores (se repite por cada pote con indicador "Pote X de Y")
+3. Agregar toppings opcionales (se repite por cada pote, max 3, con costo)
 4. Sumar tortas opcionales
 5. Elegir retiro o delivery
 6. Completar datos del cliente (nombre, telefono, direccion segun delivery)
@@ -92,6 +92,8 @@
 8. Enviar por WhatsApp → redirige a pagina de exito
 
 Las secciones completadas se colapsan en resumen compacto. El usuario puede reabrir cualquier paso para editar.
+
+Los potes pendientes (pasos 1-3) se mantienen en estado local y se agregan al store solo cuando todos tienen sabores y toppings asignados.
 
 ## Estado actual
 - Aplicacion inicializada con Vite, React, TypeScript y TailwindCSS
@@ -110,10 +112,12 @@ Las secciones completadas se colapsan en resumen compacto. El usuario puede reab
 - Flujo progresivo de 8 pasos con UI inspirada en PedidosYa
 - Sin landing page: la app abre directamente en el flujo de pedido
 - Sin navegacion interna en el header
+- Paso 1 multi-pote: se agregan varios potes antes de pasar a sabores
+- Pasos 2-3 repetidos por cada pote con UI de progreso (indicadores ① ② ③)
+- CTA contextual por paso: "Guardar y siguiente" / "Continuar a toppings" / "Agregar al pedido"
+- `npm audit` revisado: react-router-dom@7.18.1 (latest), ESLint 9.x (compatible)
 
 ## Roadmap inmediato
-1. Definir radio de entrega
-2. Definir horario de entrega
-3. Revisar alertas pendientes de `npm audit` relacionadas con dependencias upstream
-4. Evaluar pruebas de interfaz para flujo completo del pedido
-5. Eliminar componente `PotBuilder.tsx` (inactivo tras refactor a flujo inline)
+1. Probar flujo completo multi-pote en navegador
+2. Evaluar edicion directa de potes desde el resumen (sin pasar por flujo completo)
+3. Evaluar pruebas de interfaz para flujo completo del pedido
