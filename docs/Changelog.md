@@ -29,5 +29,11 @@
 - CTA contextual: "Guardar y siguiente" / "Continuar a toppings" / "Agregar al pedido"
 - Al terminar toppings del ultimo pote, todos los potes se agregan al store simultaneamente
 - Flujo de edicion adaptado al nuevo modelo multi-pote
+- Boton eliminar pote en paso de revision
+- Controles +/- y delete para tortas en paso de revision
+- Implementacion completa de day mode con paleta `#ffffff` (fondo), `#b6ffff` (acentos), `#40cfff` (primario)
+- Migracion de todos los componentes UI al patron `dark:` para soporte light/dark mode
 - Revision de alertas `npm audit`: react-router-dom@7.18.1, eslint mantenido en 9.x
 - Actualizacion de documentacion completa
+
+

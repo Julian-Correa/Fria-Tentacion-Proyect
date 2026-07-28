@@ -115,9 +115,12 @@ Los potes pendientes (pasos 1-3) se mantienen en estado local y se agregan al st
 - Paso 1 multi-pote: se agregan varios potes antes de pasar a sabores
 - Pasos 2-3 repetidos por cada pote con UI de progreso (indicadores ① ② ③)
 - CTA contextual por paso: "Guardar y siguiente" / "Continuar a toppings" / "Agregar al pedido"
+- Day mode completo con paleta `#ffffff`, `#b6ffff`, `#40cfff` — toggle via sol/luna en header
+- Tortas editables en paso de revision con controles +/- y delete
+- Potes eliminables desde paso de revision
 - `npm audit` revisado: react-router-dom@7.18.1 (latest), ESLint 9.x (compatible)
 
 ## Roadmap inmediato
-1. Probar flujo completo multi-pote en navegador
+1. Probar toggle light/dark en navegador, verificar todos los componentes
 2. Evaluar edicion directa de potes desde el resumen (sin pasar por flujo completo)
 3. Evaluar pruebas de interfaz para flujo completo del pedido

@@ -166,3 +166,28 @@
   - `react-router-dom` se mantiene en 7.18.1 (latest). Advisory de CSRF solo afecta modo RSC, no usado.
   - ESLint se mantiene en 9.x por compatibilidad con plugins
 - Siguiente paso recomendado: probar el flujo completo en el navegador, evaluar si se necesita edicion directa de potes desde el resumen
+
+## 2026-07-28
+- Trabajo completado: eliminar pote en review, day mode, edicion de tortas en review, documentacion
+- Archivos modificados:
+  - `src/pages/OrderPage.tsx`
+  - `src/components/ui/Button.tsx`
+  - `src/components/ui/Field.tsx`
+  - `src/components/ui/SectionCard.tsx`
+  - `src/components/ui/ThemeToggle.tsx`
+  - `src/layouts/AppShell.tsx`
+  - `src/features/catalog/components/CakeCatalog.tsx`
+  - `src/features/order/components/CheckoutForm.tsx`
+  - `src/features/order/components/OrderSummary.tsx`
+  - `src/pages/SuccessPage.tsx`
+  - `src/styles/index.css`
+  - `tailwind.config.ts`
+  - `docs/Changelog.md`
+  - `docs/SessionLog.md`
+  - `docs/ProjectMemory.md`
+- Decisiones tomadas:
+  - Day mode con paleta #ffffff (fondo), #b6ffff (acentos), #40cfff (primario)
+  - Se mantiene compatibilidad total con dark mode mediante patron `dark:` de Tailwind
+  - Tortas en paso de revision ahora tienen controles +/- y boton eliminar
+  - Los potes se pueden eliminar directamente desde el paso de revision
+- Siguiente paso recomendado: probar el toggle light/dark en el navegador, verificar que todos los componentes se vean correctos en ambos modos
