@@ -60,6 +60,7 @@ const priceSchema = z.object({
 const flavorSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
+  category: z.string().min(1),
 })
 
 const toppingSchema = z.object({
