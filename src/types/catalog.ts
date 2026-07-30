@@ -45,6 +45,7 @@ export type SizeOption = {
 export type Flavor = {
   id: string
   name: string
+  category: string
 }
 
 export type Topping = {

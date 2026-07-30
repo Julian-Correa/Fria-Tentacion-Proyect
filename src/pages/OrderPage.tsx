@@ -542,21 +542,37 @@ export const OrderPage = () => {
                         return `${pot.sizeLabel} — Seleccionados ${selectedFlavors.length} de ${size.maxFlavors}`
                       })()}
                     </p>
-                    <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
-                      {catalog.flavors.map((flavor) => {
-                        const isSelected = selectedFlavors.includes(flavor.name)
+                    {(() => {
+                      const grouped = catalog.flavors.reduce<Record<string, typeof catalog.flavors>>((acc, f) => {
+                        ;(acc[f.category] ??= []).push(f)
+                        return acc
+                      }, {})
+                      const order = ['Dulce de Leche', 'Chocolates', 'Frutales al Agua', 'Cremas']
+                      return order.map((cat) => {
+                        const items = grouped[cat]
+                        if (!items) return null
                         return (
-                          <button
-                            key={flavor.id}
-                            type="button"
-                            className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-300'}`}
-                            onClick={() => toggleFlavor(flavor.name)}
-                          >
-                            {flavor.name}
-                          </button>
+                          <div key={cat} className="mb-4">
+                            <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">{cat}</h3>
+                            <div className="grid grid-cols-2 gap-2 md:grid-cols-3 xl:grid-cols-4">
+                              {items.map((flavor) => {
+                                const isSelected = selectedFlavors.includes(flavor.name)
+                                return (
+                                  <button
+                                    key={flavor.id}
+                                    type="button"
+                                    className={`rounded-2xl border px-3 py-3 text-sm transition ${isSelected ? 'border-brand-300 bg-brand-400/15 text-white' : 'border-slate-200 bg-slate-50 text-slate-600 hover:border-brand-400/40 dark:border-white/10 dark:bg-slate-950/40 dark:text-slate-300'}`}
+                                    onClick={() => toggleFlavor(flavor.name)}
+                                  >
+                                    {flavor.name}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
                         )
-                      })}
-                    </div>
+                      })
+                    })()}
                     <label className="flex flex-col gap-2 text-sm text-slate-700 dark:text-slate-200">
                       <span>Nota del pote (opcional)</span>
                       <textarea
