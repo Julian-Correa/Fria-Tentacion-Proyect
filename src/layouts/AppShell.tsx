@@ -11,7 +11,7 @@ export const AppShell = ({ children }: PropsWithChildren) => (
         <div className="flex items-center">
           <div className="flex-1" />
           <Link to={ROUTES.order}>
-            <p className="text-lg font-semibold text-slate-900 dark:text-white">Fria Tentacion</p>
+            <p className="font-montserrat text-lg font-extrabold text-slate-900 dark:text-white">Fría Tentación</p>
           </Link>
           <div className="flex flex-1 items-center justify-end gap-2">
             <ThemeToggle />
@@ -22,7 +22,7 @@ export const AppShell = ({ children }: PropsWithChildren) => (
       <main className="flex-1">{children}</main>
 
       <footer className="mt-8 border-t border-slate-200 pt-4 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400">
-        Fria Tentacion. Carrito persistente local y confirmacion final por WhatsApp.
+        Fría Tentación. Carrito persistente local y confirmacion final por WhatsApp.
       </footer>
     </div>
   </div>

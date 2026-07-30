@@ -20,6 +20,9 @@ export default {
           950: '#093347',
         },
       },
+      fontFamily: {
+        montserrat: ['Montserrat', 'sans-serif'],
+      },
       boxShadow: {
         glow: '0 18px 60px rgba(64, 207, 255, 0.18)',
       },
