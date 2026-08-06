@@ -646,8 +646,9 @@ export const OrderPage = () => {
 
             {step.key === 'delivery' ? (
               <div className="grid gap-3 sm:grid-cols-2">
-                <label className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200 dark:has-[:checked]:border-brand-300 dark:has-[:checked]:bg-brand-400/30">
+                <label htmlFor="orderType-pickup" className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200 dark:has-[:checked]:border-brand-300 dark:has-[:checked]:bg-brand-400/30">
                   <input
+                    id="orderType-pickup"
                     type="radio"
                     value="pickup"
                     className="sr-only"
@@ -667,8 +668,9 @@ export const OrderPage = () => {
                     </div>
                   </div>
                 </label>
-                <label className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200 dark:has-[:checked]:border-brand-300 dark:has-[:checked]:bg-brand-400/30">
+                <label htmlFor="orderType-delivery" className="cursor-pointer rounded-3xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700 transition has-[:checked]:border-brand-300 has-[:checked]:bg-brand-400/15 dark:border-white/10 dark:bg-slate-950/50 dark:text-slate-200 dark:has-[:checked]:border-brand-300 dark:has-[:checked]:bg-brand-400/30">
                   <input
+                    id="orderType-delivery"
                     type="radio"
                     value="delivery"
                     className="sr-only"
